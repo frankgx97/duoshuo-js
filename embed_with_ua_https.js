@@ -166,44 +166,49 @@ function sskos(e) {
 		}
 	}
 	return os + "</span>"
-} !
-function(e, t, s) {
+} 
+!function(e, t, s) {
 	function a() {
-		return c.short_name ? b + "//" + c.short_name + "." + j.DOMAIN: j.REMOTE
+		return c.short_name ? g + "//" + c.short_name + "." + S.DOMAIN: S.REMOTE
 	}
 	function i() {
-		if (!g.checkPermission()) {
-			for (var t; t = _.shift();) {
-				var s = g.createNotification(t.iconUrl, t.title, t.body),
-				a = t.url;
+		function t() {
+			for (var t; t = y.shift();) {
+				var a = t.url,
+				i = new s(t.title, {
+					dir: "auto",
+					icon: t.iconUrl,
+					body: t.body
+				});
 				try {
-					s.onclick = function() {
+					i.onclick = function() {
 						e.focus(),
 						h.href = a,
-						s.cancel()
+						i.close()
 					}
-				} catch(i) {}
-				s.show(),
+				} catch(r) {}
 				setTimeout(function() {
-					s.cancel && s.cancel()
+					i.close && i.close()
 				},
-				8000)
+				8e3)
 			}
 		}
+		var s = e.Notification;
+		"Notification" in e && "denied" !== s.permission && ("granted" === s.permission && t(), s.requestPermission(function(e) {
+			"granted" === e && t()
+		}))
 	}
 	function r() {
-		return 0 == ot.data.user_id
+		return 0 == nt.data.user_id
 	}
 	function n(e) {
-		j.theme = e,
-		"none" != e && o.injectStylesheet(j.STATIC_URL + "/styles/embed" + (e ? "." + e + ".css?" + R[e] : "." + short_name) + ".css")
+		S.theme = e,
+		"none" != e && o.injectStylesheet(S.STATIC_URL + "/styles/embed" + (e ? "." + e + ".css?" + A[e] : "." + short_name) + ".css")
 	}
 	var o = {},
 	d = t.getElementsByTagName("head")[0] || t.getElementsByTagName("body")[0];
 	if (o.extend = function(e, t) {
-		for (var s in t) {
-			e[s] = t[s]
-		}
+		for (var s in t) e[s] = t[s];
 		return e
 	},
 	o.injectScript = function(a, i) {
@@ -236,48 +241,31 @@ function(e, t, s) {
 	},
 	o.getCookie = function(e) {
 		for (var a, i, r, n = " " + e + "=",
-		o = t.cookie.split(";"), d = 0; d < o.length; d++) {
-			if (a = " " + o[d], i = a.indexOf(n), i >= 0 && i + n.length == (r = a.indexOf("=") + 1)) {
-				return decodeURIComponent(a.substring(r, a.length).replace(/\+/g, ""))
-			}
-		}
+		o = t.cookie.split(";"), d = 0; d < o.length; d++) if (a = " " + o[d], i = a.indexOf(n), i >= 0 && i + n.length == (r = a.indexOf("=") + 1)) return decodeURIComponent(a.substring(r, a.length).replace(/\+/g, ""));
 		return s
 	},
 	o.param = function(e) {
 		var t = [];
-		for (var a in e) {
-			e[a] != s && t.push(a + "=" + encodeURIComponent(e[a]))
-		}
+		for (var a in e) e[a] != s && t.push(a + "=" + encodeURIComponent(e[a]));
 		return t.join("&")
 	},
 	o.cssProperty = function(e, s) {
 		var a = (t.body || t.documentElement).style;
-		if ("undefined" == typeof a) {
-			return ! 1
-		}
-		if ("string" == typeof a[e]) {
-			return s ? e: !0
-		}
-		for (var i = ["Moz", "Webkit", "ms"], e = e.charAt(0).toUpperCase() + e.substr(1), r = 0; r < i.length; r++) {
-			if ("string" == typeof a[i[r] + e]) {
-				return s ? i[r] + e: !0
-			}
-		}
+		if ("undefined" == typeof a) return ! 1;
+		if ("string" == typeof a[e]) return s ? e: !0;
+		for (var i = ["Moz", "Webkit", "ms"], e = e.charAt(0).toUpperCase() + e.substr(1), r = 0; r < i.length; r++) if ("string" == typeof a[i[r] + e]) return s ? i[r] + e: !0
 	},
 	!e.DUOSHUO) {
-		for (var l in Object.prototype) {
-			return alert("Object.prototype 不为空，请不要给 Object.prototype 设置方法")
-		}
+		for (var l in Object.prototype) return alert("Object.prototype 不为空，请不要给 Object.prototype 设置方法");
 		var c, u, p = e.JSON,
 		h = e.location,
 		f = e.XMLHttpRequest,
 		m = p && p.stringify && e.localStorage,
 		v = e.navigator.userAgent,
-		g = e.webkitNotifications,
-		b = "https:" == t.location.protocol ? "https:": "http:",
-		y = 0,
-		_ = [],
-		k = u = function() {
+		g = "https:" == t.location.protocol ? "https:": "http:",
+		b = 0,
+		y = [],
+		_ = u = function() {
 			function e(e) {
 				return t[e] || "&amp;"
 			}
@@ -294,28 +282,24 @@ function(e, t, s) {
 				return null == t || t === !1 ? "": a.test(t) ? t.replace(s, e) : t
 			}
 		} (),
-		w = function(e) {
-			if (e.match(/^(http|https):/)) {
-				return e
-			}
+		k = function(e) {
+			if (e.match(/^(http|https):/)) return e;
 			var s = t.createElement("a");
 			return s.href = e,
-			O.hrefNormalized ? s.href: s.getAttribute("href", 4)
+			P.hrefNormalized ? s.href: s.getAttribute("href", 4)
 		},
-		x = function(e) {
+		w = function(e) {
 			return function() {
 				return e
 			}
 		},
-		T = function() {
+		x = function() {
 			for (var e = {},
-			t = 0; t < arguments.length; t++) {
-				arguments[t] && o.extend(e, arguments[t])
-			}
+			t = 0; t < arguments.length; t++) arguments[t] && o.extend(e, arguments[t]);
 			var s = o.param(e);
 			return s ? "?" + s: ""
 		},
-		q = function() {
+		T = function() {
 			var e = o.getCookie("duoshuo_token");
 			return e ? {
 				jwt: e
@@ -324,24 +308,22 @@ function(e, t, s) {
 				remote_auth: c.remote_auth
 			}: s
 		},
-		C = function() {
+		q = function() {
 			if (!c && (c = e.duoshuoQuery)) {
-				if (!c.short_name || "your_duoshuo_short_name" === c.short_name) {
-					return c = s,
-					void alert("你还没有设置多说域名(duoshuoQuery.short_name)，填入已有域名或创建新站点：http://duoshuo.com/create-site/")
-				}
-				rt.trigger("queryDefined")
+				if (!c.short_name || "your_duoshuo_short_name" === c.short_name) return c = s,
+				void alert("你还没有设置多说域名(duoshuoQuery.short_name)，填入已有域名或创建新站点：http://duoshuo.com/create-site/");
+				it.trigger("queryDefined")
 			}
 			return c
 		},
-		S = function(e) {
+		C = function(e) {
 			return e && e.error && e.warn ? e: {
 				error: function() {},
 				log: function() {},
 				warn: function() {}
 			}
 		} (e.console),
-		j = e.DUOSHUO = {
+		S = e.DUOSHUO = {
 			sourceName: {
 				weibo: "新浪微博",
 				qq: "QQ",
@@ -349,49 +331,29 @@ function(e, t, s) {
 				qqt: "腾讯微博",
 				renren: "人人网",
 				douban: "豆瓣网",
-				netease: "网易微博",
 				kaixin: "开心网",
 				sohu: "搜狐微博",
 				baidu: "百度",
-				taobao: "淘宝",
-				msn: "MSN",
 				google: "谷歌",
 				wechat: "微信",
-				diandian: "点点网",
-				duitang: "堆糖",
-				youdao: "有道云笔记",
-				pengyou: "朋友网",
+				weixin: "微信",
 				facebook: "Facebook",
 				twitter: "Twitter",
-				linkedin: "Linkedin",
-				huaban: "花瓣网",
-				mogujie: "蘑菇街",
-				meilishuo: "美丽说"
+				linkedin: "Linkedin"
 			},
 			serviceNames: {
 				weibo: "微博",
 				qq: "QQ",
 				douban: "豆瓣",
 				renren: "人人",
-				netease: "网易",
 				kaixin: "开心",
-				sohu: "搜狐",
 				baidu: "百度",
-				taobao: "淘宝",
-				msn: "MSN",
-				google: "谷歌",
 				google: "谷歌",
 				wechat: "微信",
-				diandian: "点点",
-				duitang: "堆糖",
-				youdao: "有道云笔记",
-				pengyou: "朋友网",
+				weixin: "微信",
 				facebook: "Facebook",
 				twitter: "Twitter",
-				linkedin: "Linkedin",
-				huaban: "花瓣网",
-				mogujie: "蘑菇街",
-				meilishuo: "美丽说"
+				linkedin: "Linkedin"
 			},
 			parseDate: function(e) {
 				return e.parse("2011-10-28T00:00:00+08:00") &&
@@ -409,35 +371,31 @@ function(e, t, s) {
 				}
 			} (Date),
 			fullTime: function(e) {
-				var t = j.parseDate(e);
+				var t = S.parseDate(e);
 				return t.getFullYear() + "年" + (t.getMonth() + 1) + "月" + t.getDate() + "日 " + t.toLocaleTimeString()
 			},
 			elapsedTime: function(e) {
-				var t = j.parseDate(e),
+				var t = S.parseDate(e),
 				s = new Date,
-				a = (s - y - t) / 1000;
+				a = (s - b - t) / 1e3;
 				return 10 > a ? "刚刚": 60 > a ? Math.round(a) + "秒前": 3600 > a ? Math.round(a / 60) + "分钟前": 86400 > a ? Math.round(a / 3600) + "小时前": (s.getFullYear() == t.getFullYear() ? "": t.getFullYear() + "年") + (t.getMonth() + 1) + "月" + t.getDate() + "日"
 			},
 			compileStyle: function(e) {
 				var t = "",
 				s = {};
-				if (s.textbox = "#ds-thread #ds-reset .ds-replybox .ds-textarea-wrapper", !e) {
-					return t
-				}
-				for (var a in e) {
-					t += s[a] + "{" + e[a] + "}\n"
-				}
+				if (s.textbox = "#ds-thread #ds-reset .ds-replybox .ds-textarea-wrapper", !e) return t;
+				for (var a in e) t += s[a] + "{" + e[a] + "}\n";
 				return t
 			},
 			init: function(e, t) {
-				e && !E[e] && (E[e] = t || {
+				e && !O[e] && (O[e] = t || {
 					type: "EmbedThread"
 				}),
-				j.initView && j.initView()
+				S.initView && S.initView()
 			}
 		},
-		P = t.all,
-		O = j.support = function() {
+		j = t.all,
+		P = S.support = function() {
 			var s = t.createElement("div");
 			s.innerHTML = '<a href="/a" style="opacity:.55;">a</a><input type="checkbox"/>';
 			var a = s.getElementsByTagName("a")[0],
@@ -454,7 +412,7 @@ function(e, t, s) {
 			r.authInWin = e.postMessage && e.screen.width > 800 && !r.iOS && !r.android && h.origin,
 			r
 		} (),
-		E = j.selectors = {
+		O = S.selectors = {
 			".ds-thread": {
 				type: "EmbedThread"
 			},
@@ -480,92 +438,75 @@ function(e, t, s) {
 				type: "ShareWidget"
 			}
 		},
-		L = j.openDialog = function(e) {
-			return j.dialog !== s && j.dialog.el.remove(),
-			j.dialog = new at.Dialog(tt.dialog(e)).open()
+		E = S.openDialog = function(e) {
+			return S.dialog !== s && S.dialog.el.remove(),
+			S.dialog = new st.Dialog(et.dialog(e)).open()
 		},
-		N = j.smilies = {};
-		j.require = function() {
+		L = S.smilies = {};
+		S.require = function() {
 			function t(e) {
-				var t = z[e] ? "?" + z[e] + ".js": "";
-				return j.STATIC_URL + "/libs/" + e + ".js" + t
+				var t = U[e] ? "?" + U[e] + ".js": "";
+				return S.STATIC_URL + "/libs/" + e + ".js" + t
 			}
 			var s = {
 				mzadxN: "undefined" != typeof mzadxN
 			};
-			return "undefined" != typeof jQuery && jQuery.fn.jquery >= "1.5" && (s["embed.compat"] = !0, j.jQuery = e.jQuery),
+			return "undefined" != typeof jQuery && jQuery.fn.jquery >= "1.5" && (s["embed.compat"] = !0, S.jQuery = e.jQuery),
 			function(e, a) {
-				if ("string" == typeof e) {
-					s[e] ? a() : o.injectScript(t(e),
-					function() {
-						s[e] = !0,
-						a()
-					})
-				} else {
-					if ("object" == typeof e) {
-						var i, r = !0;
-						for (i = 0; i < e.length; i++) { (function(n) {
-								s[e[i]] || (r = !1, o.injectScript(t(n),
-								function() {
-									s[n] = !0;
-									for (var t = 0; t < e.length; t++) {
-										if (!s[e[t]]) {
-											return
-										}
-									}
-									a()
-								}))
-							})(e[i])
-						}
-						r && a()
-					}
+				if ("string" == typeof e) s[e] ? a() : o.injectScript(t(e),
+				function() {
+					s[e] = !0,
+					a()
+				});
+				else if ("object" == typeof e) {
+					var i, r = !0;
+					for (i = 0; i < e.length; i++)(function(n) {
+						s[e[i]] || (r = !1, o.injectScript(t(n),
+						function() {
+							s[n] = !0;
+							for (var t = 0; t < e.length; t++) if (!s[e[t]]) return;
+							a()
+						}))
+					})(e[i]);
+					r && a()
 				}
 			}
 		} ();
-		for (var I = 0,
-		M = ["EmbedThread", "RecentComments", "RecentVisitors", "TopUsers", "TopThreads", "LoginWidget", "ThreadCount"]; I < M.length; I++) {
-			j[M[I]] = function(e) {
-				return function(t, s) {
-					s = s || {},
-					s.type = e,
-					t && !E[t] && (E[t] = s),
-					j.initSelector && j.initSelector(t, s)
-				}
-			} (M[I]),
-			j["create" + M[I]] = function(e) {
-				return function(s, a) {
-					var i = t.createElement(s);
-					for (var r in a) {
-						i.setAttribute("data-" + r, a[r])
-					}
-					return j[e](i),
-					i
-				}
-			} (M[I])
-		}
-		j.RecentCommentsWidget = j.RecentComments;
-		var A = j.API = {
+		for (var N = 0,
+		I = ["EmbedThread", "RecentComments", "RecentVisitors", "TopUsers", "TopThreads", "LoginWidget", "ThreadCount"]; N < I.length; N++) S[I[N]] = function(e) {
+			return function(t, s) {
+				s = s || {},
+				s.type = e,
+				t && !O[t] && (O[t] = s),
+				S.initSelector && S.initSelector(t, s)
+			}
+		} (I[N]),
+		S["create" + I[N]] = function(e) {
+			return function(s, a) {
+				var i = t.createElement(s);
+				for (var r in a) i.setAttribute("data-" + r, a[r]);
+				return S[e](i),
+				i
+			}
+		} (I[N]);
+		S.RecentCommentsWidget = S.RecentComments;
+		var R = S.API = {
 			ajax: function(e, t, i, r, n) {
 				function d(e) {
 					var t = e.getResponseHeader("Date");
-					t && (y = new Date - new Date(t))
+					t && (b = new Date - new Date(t))
 				}
 				function l(e, t, s) {
 					var a, i, o, l = t;
-					if (e >= 200 && 300 > e || 304 === e) {
-						if (304 === e) {
-							l = "notmodified",
-							o = !0
-						} else {
-							try {
-								a = p.parse(s),
-								l = "success",
-								o = !0
-							} catch(c) {
-								l = "parsererror",
-								i = c
-							}
-						}
+					if (e >= 200 && 300 > e || 304 === e) if (304 === e) l = "notmodified",
+					o = !0;
+					else try {
+						a = p.parse(s),
+						l = "success",
+						o = !0
+					} catch(c) {
+						l = "parsererror",
+						i = c
 					} else {
 						i = l,
 						(!l || e) && (l = "error", 0 > e && (e = 0));
@@ -576,12 +517,12 @@ function(e, t, s) {
 							i = c
 						}
 					}
-					o ? r && r(a) : "parseerror" === l ? S.error("解析错误: " + s) : (S.error("出错啦(" + a.code + "): " + a.errorMessage), n && n(a), a.errorTrace && S.error(a.errorTrace)),
+					o ? r && r(a) : "parseerror" === l ? C.error("解析错误: " + s) : (C.error("出错啦(" + a.code + "): " + a.errorMessage), n && n(a), a.errorTrace && C.error(a.errorTrace)),
 					d(m)
 				}
 				var u = o.getCookie("duoshuo_token");
 				i = i || {},
-				i.v = j.version,
+				i.v = S.version,
 				u ? i.jwt = u: c.remote_auth && (i.remote_auth = c.remote_auth);
 				var h = f && p && p.parse;
 				if (h) {
@@ -596,20 +537,17 @@ function(e, t, s) {
 						g = function(e, t) {
 							var a, i, r, n;
 							try {
-								if (g && (t || 4 === m.readyState)) {
-									if (g = s, t) {
-										4 !== m.readyState && m.abort()
-									} else {
-										a = m.status,
-										r = m.getAllResponseHeaders();
-										try {
-											n = m.responseText
-										} catch(e) {}
-										try {
-											i = m.statusText
-										} catch(o) {
-											i = ""
-										}
+								if (g && (t || 4 === m.readyState)) if (g = s, t) 4 !== m.readyState && m.abort();
+								else {
+									a = m.status,
+									r = m.getAllResponseHeaders();
+									try {
+										n = m.responseText
+									} catch(e) {}
+									try {
+										i = m.statusText
+									} catch(o) {
+										i = ""
 									}
 								}
 							} catch(d) {
@@ -621,19 +559,19 @@ function(e, t, s) {
 					}
 				}
 				"GET" != e && (i._method = "POST");
-				var b = "cb_" + Math.round(1000000 * Math.random());
-				A[b] = function(e) {
+				var y = "cb_" + Math.round(1e6 * Math.random());
+				R[y] = function(e) {
 					switch (e.code) {
 					case 0:
 						r && r(e);
 						break;
 					default:
 						n && n(e),
-						S.error("出错啦(" + e.code + "): " + e.errorMessage),
-						e.errorTrace && S.error(e.errorTrace)
+						C.error("出错啦(" + e.code + "): " + e.errorMessage),
+						e.errorTrace && C.error(e.errorTrace)
 					}
 				},
-				i.callback = "DUOSHUO.API['" + b + "']",
+				i.callback = "DUOSHUO.API['" + y + "']",
 				o.injectScript(a() + "/api/" + t + ".jsonp?" + o.param(i))
 			},
 			get: function(e, t, s, a) {
@@ -643,23 +581,17 @@ function(e, t, s) {
 				return this.ajax("POST", e, t, s, a)
 			}
 		},
-		U = j.ws = {
+		M = S.ws = {
 			messages: [],
 			send: function(s) {
-				if (! ("WebSocket" in e && p)) {
-					return ! 1
-				}
+				if (! ("WebSocket" in e && p)) return ! 1;
 				var a = this;
 				if (a.messages.push(p.stringify(s)), !a.webSocket) {
 					var r = "https:" === t.location.protocol ? "wss://ws.duoshuo.com:8202/": "ws://ws.duoshuo.com:8201/",
 					n = a.webSocket = new WebSocket(r);
 					n.onopen = function() {
 						var e, t = 1 === n.readyState;
-						if (t) {
-							for (; e = a.messages.shift();) {
-								n.send(e)
-							}
-						}
+						if (t) for (; e = a.messages.shift();) n.send(e)
 					},
 					n.onmessage = function(e) {
 						try {
@@ -669,13 +601,11 @@ function(e, t, s) {
 						}
 						switch (t.type) {
 						case "post":
-							for (var a, r = 0; r < j.pagelets.length; r++) {
-								a = j.pagelets[r],
-								a.threadId == t.thread_id && a.onMessage(t)
-							}
+							for (var a, r = 0; r < S.pagelets.length; r++) a = S.pagelets[r],
+							a.threadId == t.thread_id && a.onMessage(t);
 							break;
 						case "notification":
-							_.push(t),
+							y.push(t),
 							i()
 						}
 					},
@@ -687,17 +617,18 @@ function(e, t, s) {
 				a.webSocket.onopen()
 			}
 		};
-		j.DOMAIN = "duoshuo.com",
-		j.STATIC_URL = b + "//static.duoshuo.com",
-		j.REMOTE = b + "//duoshuo.com",
-		j.version = "15.4.27";
-		var R = {
-			"default": "080f31b2",
-			dark: "ddc346d8",
-			bluebox: "0f0f035c",
-			newhua: "dc453ca2"
+		S.DOMAIN = "duoshuo.com",
+		S.STATIC_URL = g + "//static.duoshuo.com",
+		S.REMOTE = g + "//duoshuo.com",
+		S.version = "16.3.18";
+		var A = {
+			"default": "9b2a46a0",
+			dark: "33f3a5ac",
+			bluebox: "39a75d50",
+			newhua: "706ba4eb",
+			justflat: "9d72ec5a"
 		},
-		z = {
+		U = {
 			"embed.compat": "24f8ca3f",
 			smilies: "921e8eda"
 		},
@@ -735,52 +666,40 @@ function(e, t, s) {
 			qqt_reposts_one: "1条腾讯微博",
 			qqt_reposts_multiple: "{num}条腾讯微博"
 		},
-		W = {
+		z = {
 			get: function(e) {
 				return m ? m[e] : void 0
 			},
 			save: function(e, t) {
-				if (m) {
-					try {
-						m.removeItem(e),
-						m[e] = p.stringify(t),
-						m.removeItem(e + ":timestamp"),
-						m[e + ":timestamp"] = Math.floor((new Date - y) / 1000)
-					} catch(s) {}
-				}
+				if (m) try {
+					m.removeItem(e),
+					m[e] = p.stringify(t),
+					m.removeItem(e + ":timestamp"),
+					m[e + ":timestamp"] = Math.floor((new Date - b) / 1e3)
+				} catch(s) {}
 			}
 		},
-		H = j.loadRequire = function(e) {
-			if (e.visitor && (!ot.data && e.visitor.user_id && g && !g.checkPermission() && U.send({
-				logged_user_id: e.visitor.user_id
-			}), ot.reset(e.visitor)), e.site && (nt.reset(e.site), W.save("ds_site_" + c.short_name, e.site)), !j.theme && nt.data.theme && n(nt.data.theme), e.lang && (o.extend(D, e.lang), W.save("ds_lang_" + c.short_name, e.lang)), e.stylesheets) {
-				for (var t = 0; t < e.stylesheets.length; t++) {
-					o.injectStylesheet(e.stylesheets[t])
-				}
-			}
-			if (e.nonce && (j.nonce = e.nonce), e.style && o.injectStyle((e.style || "") + j.compileStyle(c.component_style)), e.unread && dt.reset(e.unread), e.warnings) {
-				for (var t = 0; t < e.warnings.length; t++) {
-					S.warn(e.warnings[t])
-				}
-			}
+		W = S.loadRequire = function(t) {
+			if (t.visitor && (!nt.data && t.visitor.user_id && e.Notification && M.send({
+				logged_user_id: t.visitor.user_id
+			}), nt.reset(t.visitor)), t.site && (rt.reset(t.site), z.save("ds_site_" + c.short_name, t.site)), !S.theme && rt.data.theme && n(rt.data.theme), t.lang && (o.extend(D, t.lang), z.save("ds_lang_" + c.short_name, t.lang)), t.stylesheets) for (var s = 0; s < t.stylesheets.length; s++) o.injectStylesheet(t.stylesheets[s]);
+			if (t.nonce && (S.nonce = t.nonce), t.style && o.injectStyle((t.style || "") + S.compileStyle(c.component_style)), t.unread && ot.reset(t.unread), t.warnings) for (var s = 0; s < t.warnings.length; s++) C.warn(t.warnings[s])
 		},
 		B = 0,
-		J = j.Class = function() {};
-		J.extend = function(e) {
+		H = S.Class = function() {};
+		H.extend = function(e) {
 			function t() { ! B && this.init && this.init.apply(this, arguments)
 			}
 			B = 1;
 			var s = new this;
 			B = 0;
-			for (var a in e) {
-				s[a] = e[a]
-			}
+			for (var a in e) s[a] = e[a];
 			return t.prototype = s,
 			t.prototype.constructor = t,
 			t.extend = arguments.callee,
 			t
 		};
-		var Q = j.Event = J.extend({
+		var J = S.Event = H.extend({
 			on: function(e, t) {
 				var a = this.handlers || (this.handlers = {});
 				return a[e] === s && (a[e] = []),
@@ -789,13 +708,11 @@ function(e, t, s) {
 			},
 			trigger: function(e, t) {
 				var s = (this.handlers || (this.handlers = {}))[e];
-				if (s) {
-					for (var a = 0; a < s.length && s[a].call(this, t) !== !1; a++) {}
-				}
+				if (s) for (var a = 0; a < s.length && s[a].call(this, t) !== !1; a++);
 				return this
 			}
 		}),
-		V = j.Widget = Q.extend({
+		Q = S.Widget = J.extend({
 			init: function(e, t) {
 				this.el = e,
 				this.options = t || {},
@@ -806,7 +723,7 @@ function(e, t, s) {
 			load: function(e) {
 				switch (e.code) {
 				case 0:
-					H(e);
+					W(e);
 					var t = this.prepare(e);
 					t.options = o.extend(this.options, e.options),
 					this.onload(t);
@@ -816,18 +733,18 @@ function(e, t, s) {
 				}
 			},
 			onload: function(e) {
-				this.el.html(tt[this.tmpl](e))
+				this.el.html(et[this.tmpl](e))
 			},
 			prepare: function(e) {
 				return e
 			},
 			onMessage: function() {},
 			onError: function(e) {
-				S.error("出错啦(" + e.code + "): " + e.errorMessage),
-				e.errorTrace && S.error(e.errorTrace)
+				C.error("出错啦(" + e.code + "): " + e.errorMessage),
+				e.errorTrace && C.error(e.errorTrace)
 			}
 		}),
-		$ = j.Model = Q.extend({
+		V = S.Model = J.extend({
 			init: function(e) {
 				this.data = e
 			},
@@ -840,13 +757,8 @@ function(e, t, s) {
 				this.trigger("reset")
 			},
 			set: function(e, t) {
-				if (t === s) {
-					for (var a in e) {
-						this.data[a] = e[a]
-					}
-				} else {
-					this.data[e] = t
-				}
+				if (t === s) for (var a in e) this.data[a] = e[a];
+				else this.data[e] = t;
 				return this.trigger("reset"),
 				this
 			},
@@ -855,69 +767,58 @@ function(e, t, s) {
 				this.data)
 			}
 		}),
-		F = $.extend({
+		$ = V.extend({
 			toJSON: function() {
 				return o.extend({},
 				this.data)
 			}
 		}),
-		G = $.extend({
+		F = V.extend({
 			toJSON: function() {
 				var e = o.extend({},
 				this.data);
-				return e.theAuthor = ut[this.data.author_id] && ut[this.data.author_id].data || this.data.author,
+				return e.theAuthor = ct[this.data.author_id] && ct[this.data.author_id].data || this.data.author,
 				e.parents = this.data.parents || [],
 				e
 			}
 		}),
-		Y = $.extend({
+		Y = V.extend({
 			toJSON: function() {
 				return o.extend({},
 				this.data)
 			}
 		}),
-		Z = function(e) {
+		G = function(e) {
 			this.model = e
 		};
-		Z.prototype.set = function(e) {
-			for (var t in e) {
-				e[t] && (this[t] ? this[t].set(e[t]) : this[t] = new this.model(e[t]))
-			}
+		G.prototype.set = function(e) {
+			for (var t in e) e[t] && (this[t] ? this[t].set(e[t]) : this[t] = new this.model(e[t]))
 		},
-		Z.prototype.get = function(e) {
+		G.prototype.get = function(e) {
 			for (var t = 0,
-			s = []; t < e.length; t++) {
-				s[t] = this[e[t]]
-			}
+			s = []; t < e.length; t++) s[t] = this[e[t]];
 			return s
 		},
-		Z.prototype.getJSON = function(e) {
+		G.prototype.getJSON = function(e) {
 			for (var t = 0,
-			s = []; t < e.length; t++) {
-				this[e[t]] && s.push(this[e[t]].toJSON())
-			}
+			s = []; t < e.length; t++) this[e[t]] && s.push(this[e[t]].toJSON());
 			return s
 		};
-		var X = {
+		var Z = {
 			userUrl: function(e) {
 				return e.url
 			},
-			/*avatarUrl: function(e) {
-				return e.avatar_url || nt.data.default_avatar_url
-			},*/
 			avatarUrl: function(e) {
 				if (document.location.protocol == "https:") {
 					if (e.avatar_url) {
 						e.avatar_url = e.avatar_url.replace(/^http\:\/\//, "https://");
-						e.avatar_url = e.avatar_url.replace(/himg\.bdimg\.com/, "nzriuc44h.qnssl.com");
-						e.avatar_url = e.avatar_url.replace(/ds\.cdncache\.org/, "nzrisok3d.qnssl.com");
-						e.avatar_url = e.avatar_url.replace(/img\.kaixin001\.com\.cn/, "nzrktdox3.qnssl.com");
+						e.avatar_url = e.avatar_url.replace(/himg\.bdimg\.com/, "o36s1s8yx.qnssl.com");
+						e.avatar_url = e.avatar_url.replace(/ds\.cdncache\.org/, "o36s5quh2.qnssl.com");
 						e.avatar_url = e.avatar_url.replace(/img\d+\.douban\.com/, "img2.doubanio.com");
-						e.avatar_url = e.avatar_url.replace(/app\.qlogo\.cn/, "nzvcelvwu.qnssl.com");
-						e.avatar_url = e.avatar_url.replace(/wx\.qlogo\.cn/, "nzwsf9aei.qnssl.com");
-						e.avatar_url = e.avatar_url.replace(/tp\d+\.sinaimg\.cn/, "nzqv0a582.qnssl.com");
+						e.avatar_url = e.avatar_url.replace(/app\.qlogo\.cn/, "o36s1f0fm.qnssl.com");
+						e.avatar_url = e.avatar_url.replace(/tp\d+\.sinaimg\.cn/, "o36sh4rxx.qnssl.com");
 					} else {
-						rt.data.default_avatar_url = rt.data.default_avatar_url.replace(/^http\:\/\//, "https://");
+						rt.data.default_avatar_url = "https://static.duoshuo.com/images/noavatar_default.png";
 					}
 				}
 				return e.avatar_url || rt.data.default_avatar_url
@@ -925,226 +826,200 @@ function(e, t, s) {
 			loginUrl: function(e, t) {
 				return t || (t = {}),
 				c.sso && c.sso.login && (t.sso = 1, t.redirect_uri = c.sso.login),
-				a() + "/login/" + e + "/" + T(t)
+				a() + "/login/" + e + "/" + x(t)
 			},
 			bindUrl: function(e) {
-				return a() + "/bind/" + e + "/" + T(c.sso && c.sso.login ? {
+				return a() + "/bind/" + e + "/" + x(c.sso && c.sso.login ? {
 					sso: 1,
 					redirect_uri: c.sso.login
-				}: null, q())
+				}: null, T())
 			},
 			logoutUrl: function() {
-				return a() + "/logout/" + T(c.sso && c.sso.logout ? {
+				return a() + "/logout/" + x(c.sso && c.sso.logout ? {
 					sso: 1,
 					redirect_uri: c.sso.logout
 				}: null)
 			}
 		},
-		K = ["weibo", "qq", "renren", "douban"],
-		et = ["kaixin", "netease", "sohu", "baidu", "google"],
-		tt = j.templates = {
+		X = ["weixin", "weibo", "qq", "renren"],
+		K = ["douban", "kaixin", "baidu", "google"],
+		et = S.templates = {
 			userAnchor: function(e) {
-				return e.url ? '<a rel="nofollow author" target="_blank" href="' + k(e.url) + '">' + k(e.name) + "</a>": k(e.name)
+				return e.url ? '<a rel="nofollow author" target="_blank" href="' + _(e.url) + '">' + _(e.name) + "</a>": _(e.name)
 			},
 			avatarImg: function(e, t) {
-				return '<img src="' + k(X.avatarUrl(e, t)) + '" alt="' + k(e.name) + '"' + (t ? ' style="width:' + t + "px;height:" + t + 'px"': "") + "/>"
+				return '<img src="' + _(Z.avatarUrl(e, t)) + '" alt="' + _(e.name) + '"' + (t ? ' style="width:' + t + "px;height:" + t + 'px"': "") + "/>"
 			},
 			avatar: function(e, t) {
-				var s = tt.avatarImg(e, t),
-				i = X.userUrl(e);
-				return i ? '<a rel="nofollow author" target="_blank" href="' + k(i) + '" ' + (e.user_id ? " onclick=\"this.href='" + a() + "/user-url/?user_id=" + e.user_id + "';\"": "") + ' title="' + k(e.name) + '">' + s + "</a>": s
+				var s = et.avatarImg(e, t),
+				i = Z.userUrl(e);
+				return i ? '<a rel="nofollow author" target="_blank" href="' + _(i) + '" ' + (e.user_id ? " onclick=\"this.href='" + a() + "/user-url/?user_id=" + e.user_id + "';\"": "") + ' title="' + _(e.name) + '">' + s + "</a>": s
 			},
 			timeText: function(e) {
-				return e ? '<span class="ds-time" datetime="' + e + '" title="' + j.fullTime(e) + '">' + j.elapsedTime(e) + "</span>": ""
+				return e ? '<span class="ds-time" datetime="' + e + '" title="' + S.fullTime(e) + '">' + S.elapsedTime(e) + "</span>": ""
 			},
 			timeAnchor: function(e, t) {
-				return e ? '<a href="' + t + '" target="_blank" rel="nofollow" class="ds-time" datetime="' + e + '" title="' + j.fullTime(e) + '">' + j.elapsedTime(e) + "</a>": ""
+				return e ? '<a href="' + t + '" target="_blank" rel="nofollow" class="ds-time" datetime="' + e + '" title="' + S.fullTime(e) + '">' + S.elapsedTime(e) + "</a>": ""
 			},
 			serviceIcon: function(e, t) {
-				return '<a href="javascript:void(0)" class="ds-service-icon' + (t ? "-grey": "") + " ds-" + e + '" data-service="' + e + '" title="' + j.sourceName[e] + '"></a>'
+				return '<a href="javascript:void(0)" class="ds-service-icon' + (t ? "-grey": "") + " ds-" + e + '" data-service="' + e + '" title="' + S.sourceName[e] + '"></a>'
 			},
 			poweredBy: function(e) {
-				return '<p class="ds-powered-by"><a href="http://duoshuo.com" target="_blank" rel="nofollow">' + k(e) + "</a></p>"
+				return '<p class="ds-powered-by"><a href="http://duoshuo.com" target="_blank" rel="nofollow">' + _(e) + "</a></p>"
 			},
-			indicator: x('<div id="ds-indicator"></div>'),
-			waitingImg: x('<div id="ds-waiting"></div>'),
+			indicator: w('<div id="ds-indicator"></div>'),
+			waitingImg: w('<div id="ds-waiting"></div>'),
 			loginItem: function(e, t) {
-				var s = X[t ? "bindUrl": "loginUrl"](e);
-				return '<li>    <a href="' + s + '" rel="nofollow" class="ds-service-link ds-' + e + '">' + j.serviceNames[e] + (ot.data.social_uid[e] ? ' <span class="ds-icon ds-icon-ok"></span>': "") + "</a></li>"
+				var s = Z[t ? "bindUrl": "loginUrl"](e);
+				return '<li>    <a href="' + s + '" rel="nofollow" class="ds-service-link ds-' + e + '">' + S.serviceNames[e] + (nt.data.social_uid[e] ? ' <span class="ds-icon ds-icon-ok"></span>': "") + "</a></li>"
 			}
 		},
-		st = function(e) {
+		tt = function(e) {
 			var t = [];
-			for (var s in e) {
-				t.push('<input type="hidden" name="' + s + '" value="' + k(e[s]) + '" />')
-			}
+			for (var s in e) t.push('<input type="hidden" name="' + s + '" value="' + _(e[s]) + '" />');
 			return t.join("\n")
 		};
-		tt.commentList = function(e) {
+		et.commentList = function(e) {
 			var t = "",
 			s = e.list;
-			if (s) {
-				for (var a, i = -1,
-				r = s.length - 1; r > i;) {
-					a = s[i += 1],
-					t += '<li class="ds-comment',
-					e.options.show_avatars && (t += " ds-show-avatars"),
-					t += '" data-post-id="' + a.post_id + '">',
-					e.options.show_avatars && (t += '<div class="ds-avatar">' + tt.avatar(a.theAuthor, e.options.avatar_size) + "</div>"),
-					t += '<div class="ds-meta">' + tt.userAnchor(a.theAuthor),
-					e.options.show_time && (t += tt.timeText(a.created_at)),
-					t += "</div>",
-					t += e.options.show_title ? '<div class="ds-thread-title">在 <a href="' + u(a.thread.url) + '#comments">' + u(a.thread.title) + '</a> 中评论</div><div class="ds-excerpt">' + a.message + "</div>": '<a class="ds-excerpt" title="' + a.thread.title + ' 中的评论" href="' + u(a.thread.url) + '#comments">' + a.message + "</a>",
-					t += "</li>"
-				}
-			}
+			if (s) for (var a, i = -1,
+			r = s.length - 1; r > i;) a = s[i += 1],
+			t += '<li class="ds-comment',
+			e.options.show_avatars && (t += " ds-show-avatars"),
+			t += '" data-post-id="' + a.post_id + '">',
+			e.options.show_avatars && (t += '<div class="ds-avatar">' + et.avatar(a.theAuthor, e.options.avatar_size) + "</div>"),
+			t += '<div class="ds-meta">' + et.userAnchor(a.theAuthor),
+			e.options.show_time && (t += et.timeText(a.created_at)),
+			t += "</div>",
+			t += e.options.show_title ? '<div class="ds-thread-title">在 <a href="' + u(a.thread.url) + '#comments">' + u(a.thread.title) + '</a> 中评论</div><div class="ds-excerpt">' + a.message + "</div>": '<a class="ds-excerpt" title="' + a.thread.title + ' 中的评论" href="' + u(a.thread.url) + '#comments">' + a.message + "</a>",
+			t += "</li>";
 			return t
 		},
-		tt.ctxPost = function(e) {
+		et.ctxPost = function(e) {
 			var t = "";
-			return e.post && (t += '<li class="ds-ctx-entry"', e.hidden && (t += ' style="display:none"'), t += ' data-post-id="' + e.post.post_id + '"><div class="ds-avatar">' + tt.avatar(e.post.theAuthor || e.post.author) + '</div><div class="ds-ctx-body"><div class="ds-ctx-head">' + tt.userAnchor(e.post.theAuthor || e.post.author) + tt.timeAnchor(e.post.created_at, e.post.url), e.index >= 0 && (t += '<div class="ds-ctx-nth" title="' + j.fullTime(e.post.created_at) + '">' + (e.index + 1) + D.floor + "</div>"), t += '</div><div class="ds-ctx-content">' + e.post.message, e.index >= 0 && (t += '　　　　　　　<div class="ds-comment-actions', e.post.vote > 0 && (t += " ds-post-liked"), t += '">' + tt.likePost(e.post) + '<a class="ds-post-repost" href="javascript:void(0);"><span class="ds-icon ds-icon-share"></span>' + D.repost + '</a><a class="ds-post-reply" href="javascript:void(0);"><span class="ds-icon ds-icon-reply"></span>' + D.reply + "</a></div>"), t += "</div></div></li>"),
+			return e.post && (t += '<li class="ds-ctx-entry"', e.hidden && (t += ' style="display:none"'), t += ' data-post-id="' + e.post.post_id + '"><div class="ds-avatar">' + et.avatar(e.post.theAuthor || e.post.author) + '</div><div class="ds-ctx-body"><div class="ds-ctx-head">' + et.userAnchor(e.post.theAuthor || e.post.author) + et.timeAnchor(e.post.created_at, e.post.url), e.index >= 0 && (t += '<div class="ds-ctx-nth" title="' + S.fullTime(e.post.created_at) + '">' + (e.index + 1) + D.floor + "</div>"), t += '</div><div class="ds-ctx-content">' + e.post.message, e.index >= 0 && (t += '　　　　　　　<div class="ds-comment-actions', e.post.vote > 0 && (t += " ds-post-liked"), t += '">' + et.likePost(e.post) + '<a class="ds-post-repost" href="javascript:void(0);"><span class="ds-icon ds-icon-share"></span>' + D.repost + '</a><a class="ds-post-reply" href="javascript:void(0);"><span class="ds-icon ds-icon-reply"></span>' + D.reply + "</a></div>"), t += "</div></div></li>"),
 			t
 		},
-		tt["dialog-anonymous"] = function(e) {
+		et["dialog-anonymous"] = function(e) {
 			var t = '<h2>社交帐号登录</h2><div class="ds-icons-32">',
 			s = e.services;
-			if (s) {
-				for (var a, i = -1,
-				r = s.length - 1; r > i;) {
-					a = s[i += 1],
-					t += '<a class="ds-' + a + '" href="' + X.loginUrl(a) + '">' + j.sourceName[a] + "</a>"
-				}
-			}
+			if (s) for (var a, i = -1,
+			r = s.length - 1; r > i;) a = s[i += 1],
+			t += '<a class="ds-' + a + '" href="' + Z.loginUrl(a) + '">' + S.sourceName[a] + "</a>";
 			return t += "</div>",
-			e.options.deny_anonymous || (t += '<h2>作为游客留言</h2><form><div class="ds-control-group"><input type="text" name="author_name" id="ds-dialog-name" value="' + u(ot.data.name) + '" required /><label for="ds-dialog-name">名字(必填)</label></div>', e.options.require_guest_email && (t += '<div class="ds-control-group"><input type="email" name="author_email" id="ds-dialog-email" value="' + u(ot.data.email) + '" required /><label for="ds-dialog-email">邮箱(必填)</label></div>'), e.options.require_guest_url && (t += '<div class="ds-control-group"><input type="url" name="author_url" id="ds-dialog-url" placeholder="http://" value="' + u(ot.data.url) + '" /><label for="ds-dialog-url">网址(可选)</label></div>'), t += '<button type="submit">发布</button></form>'),
+			e.options.deny_anonymous || (t += '<h2>作为游客留言</h2><form><div class="ds-control-group"><input type="text" name="author_name" id="ds-dialog-name" value="' + u(nt.data.name) + '" required /><label for="ds-dialog-name">名字(必填)</label></div>', e.options.require_guest_email && (t += '<div class="ds-control-group"><input type="email" name="author_email" id="ds-dialog-email" value="' + u(nt.data.email) + '" required /><label for="ds-dialog-email">邮箱(必填)</label></div>'), e.options.require_guest_url && (t += '<div class="ds-control-group"><input type="url" name="author_url" id="ds-dialog-url" placeholder="http://" value="' + u(nt.data.url) + '" /><label for="ds-dialog-url">网址(可选)</label></div>'), t += '<button type="submit">发布</button></form>'),
 			t
 		},
-		tt["dialog-ask-for-auth"] = function() {
-			var e = '<h2>社交帐号登录</h2><ul class="ds-service-list">' + tt.serviceList(K) + '</ul><ul class="ds-service-list ds-additional-services">' + tt.serviceList(et) + "</ul>";
+		et["dialog-ask-for-auth"] = function() {
+			var e = '<h2>社交帐号登录</h2><ul class="ds-service-list">' + et.serviceList(X) + '</ul><ul class="ds-service-list ds-additional-services">' + et.serviceList(K) + "</ul>";
 			return e
 		},
-		tt["dialog-bind-more"] = function() {
-			var e = '<h2>绑定更多帐号</h2><ul class="ds-service-list">' + tt.serviceBindList(K) + '</ul><ul class="ds-service-list ds-additional-services">' + tt.serviceBindList(et) + '</ul><div style="clear:both"></div>';
+		et["dialog-bind-more"] = function() {
+			var e = '<h2>绑定更多帐号</h2><ul class="ds-service-list">' + et.serviceBindList(X) + '</ul><ul class="ds-service-list ds-additional-services">' + et.serviceBindList(K) + '</ul><div style="clear:both"></div>';
 			return e
 		},
-		tt["dialog-qrcode"] = function(e) {
+		et["dialog-qrcode"] = function(e) {
 			var t = '<h2>微信扫一扫，分享到朋友圈</h2><div class="ds-share-qrcode" style="text-align:center;"><img src="' + e.qrcode_url + '" alt="' + e.url + '"></div>';
 			return t
 		},
-		tt["dialog-reposts"] = function(e) {
-			var t = '<h2>转发到微博</h2><div class="ds-quote"><strong>@' + u(e.post.theAuthor.name) + "</strong>: " + e.post.message + "</div><form>" + st({
+		et["dialog-reposts"] = function(e) {
+			var t = '<h2>转发到微博</h2><div class="ds-quote"><strong>@' + u(e.post.theAuthor.name) + "</strong>: " + e.post.message + "</div><form>" + tt({
 				post_id: e.post.post_id
 			}) + '<div class="ds-textarea-wrapper"><textarea name="message" title="Ctrl+Enter快捷提交" placeholder="' + u(D.repost_reason) + '">' + u(e.repostMessage) + '</textarea><pre class="ds-hidden-text"></pre>';
 			return t += '</div><div class="ds-actions">',
-			e.service ? t += st({
+			e.service ? t += tt({
 				"service[]": e.service
-			}) : (t += '<label><input type="checkbox" name="service[]" value="weibo"', ot.data.social_uid.weibo && (t += ' checked="checked"'), t += ' /><span class="ds-service-icon ds-weibo"></span>新浪微博</label><label><input type="checkbox" name="service[]" value="qqt"', ot.data.social_uid.qq && (t += ' checked="checked"'), t += ' /><span class="ds-service-icon ds-qqt"></span>腾讯微博</label>'),
+			}) : (t += '<label><input type="checkbox" name="service[]" value="weibo"', nt.data.social_uid.weibo && (t += ' checked="checked"'), t += ' /><span class="ds-service-icon ds-weibo"></span>新浪微博</label><label><input type="checkbox" name="service[]" value="qqt"', nt.data.social_uid.qq && (t += ' checked="checked"'), t += ' /><span class="ds-service-icon ds-qqt"></span>腾讯微博</label>'),
 			t += '<button type="submit">' + D.repost + "</button></div></form>"
 		},
-		tt.dialog = function(e) {
+		et.dialog = function(e) {
 			var t = '<div class="ds-dialog"><div class="ds-dialog-inner ds-rounded"><div class="ds-dialog-body">' + e + '</div><div class="ds-dialog-footer"><a href="http://duoshuo.com/" target="_blank" class="ds-logo"></a><span>社会化评论框</span></div><a class="ds-dialog-close" href="javascript:void(0)" title="关闭"></a></div></div>';
 			return t
 		},
-		tt.hotPosts = function(e) {
+		et.hotPosts = function(e) {
 			var t = '<div class="ds-header ds-gradient-bg">' + u(D.hot_posts_title) + "</div><ul>",
 			s = e.list;
-			if (s) {
-				for (var a, i = -1,
-				r = s.length - 1; r > i;) {
-					a = s[i += 1],
-					t += tt.post({
-						post: a,
-						options: e.options
-					})
-				}
-			}
+			if (s) for (var a, i = -1,
+			r = s.length - 1; r > i;) a = s[i += 1],
+			t += et.post({
+				post: a,
+				options: e.options
+			});
 			return t += "</ul>"
 		},
-		tt.likePost = function(e) {
+		et.likePost = function(e) {
 			var t = '<a class="ds-post-likes" href="javascript:void(0);"><span class="ds-icon ds-icon-like"></span>' + D.like;
 			return e.likes > 0 && (t += "(" + e.likes + ")"),
 			t += "</a>"
 		},
-		tt.likeTooltip = function(e) {
+		et.likeTooltip = function(e) {
 			var t = '<div class="ds-like-tooltip ds-rounded"><p>很高兴你能喜欢，分享一下吧：</p><ul>';
-			for (var s in e.services) {
-				t += '<li><a class="ds-share-to-' + s + " ds-service-link ds-" + s + '" href="' + a() + "/share-proxy/?" + o.param({
-					service: s,
-					thread_id: e.thread_id
-				}) + '">' + e.services[s] + "</a></li>"
-			}
+			for (var s in e.services) t += '<li><a class="ds-share-to-' + s + " ds-service-link ds-" + s + '" href="' + a() + "/share-proxy/?" + o.param({
+				service: s,
+				thread_id: e.thread_id
+			}) + '">' + e.services[s] + "</a></li>";
 			return t += '</ul><p class="ds-like-tooltip-footer"><a class="ds-like-tooltip-close">算了</a></p></div>'
 		},
-		tt.loginButtons = function() {
-			var e = '<div class="ds-login-buttons"><p>社交帐号登录:</p><div class="ds-social-links"><ul class="ds-service-list">' + tt.serviceList(K) + '<li><a class="ds-more-services" href="javascript:void(0)">更多»</a></li></ul><ul class="ds-service-list ds-additional-services">' + tt.serviceList(et) + "</ul></div></div>";
+		et.loginButtons = function() {
+			var e = '<div class="ds-login-buttons"><p>社交帐号登录:</p><div class="ds-social-links"><ul class="ds-service-list">' + et.serviceList(X) + '<li><a class="ds-more-services" href="javascript:void(0)">更多»</a></li></ul><ul class="ds-service-list ds-additional-services">' + et.serviceList(K) + "</ul></div></div>";
 			return e
 		},
-		tt.loginWidget = function(e) {
+		et.loginWidget = function(e) {
 			var t = '<div class="ds-icons-32">',
 			s = e;
-			if (s) {
-				for (var a, i = -1,
-				r = s.length - 1; r > i;) {
-					a = s[i += 1],
-					t += '<a class="ds-' + a + '" href="' + X.loginUrl(a) + '">' + j.sourceName[a] + "</a>"
-				}
-			}
+			if (s) for (var a, i = -1,
+			r = s.length - 1; r > i;) a = s[i += 1],
+			t += '<a class="ds-' + a + '" href="' + Z.loginUrl(a) + '">' + S.sourceName[a] + "</a>";
 			return t += "</div>"
 		},
-		tt.meta = function(e) {
+		et.meta = function(e) {
 			var t = '<div class="ds-meta"><a href="javascript:void(0)" class="ds-like-thread-button ds-rounded';
 			return e.user_vote > 0 && (t += " ds-thread-liked"),
 			t += '"><span class="ds-icon ds-icon-heart"></span> <span class="ds-thread-like-text">',
 			t += e.user_vote > 0 ? "已喜欢": "喜欢",
 			t += '</span><span class="ds-thread-cancel-like">取消喜欢</span></a><span class="ds-like-panel"></span></div>'
 		},
-		tt.notify = function(e) {
+		et.notify = function(e) {
 			var t = '<div id="ds-reset"><a class="ds-logo" href="http://duoshuo.com/" target="_blank" title="多说"></a><ul class="ds-notify-unread"><li';
 			return e.comments || (t += ' style="display:none;"'),
 			t += '><a data-type="unread-comments" href="javascript:void(0);">你有' + e.comments + "条新回复</a></li><li",
 			e.notifications || (t += ' style="display:none;"'),
 			t += '><a data-type="unread-notifications" href="javascript:void(0);">你有' + e.notifications + "条系统消息</a></li></ul></div>"
 		},
-		tt.post = function(e) {
+		et.post = function(e) {
 			var t = "",
 			s = e.post,
 			i = e.options,
 			r = s.author;
-			if (t += '<li class="ds-post" data-post-id="' + s.post_id + '"><div class="ds-post-self" data-post-id="' + s.post_id + '" data-thread-id="' + s.thread_id + '" data-root-id="' + s.root_id + '" data-source="' + s.source + '"><div class="ds-avatar"', r.user_id && (t += ' data-user-id="' + r.user_id + '"'), t += ">" + tt.avatar(r), j.sourceName[s.source] && (t += tt.serviceIcon(s.source)), t += '</div><div class="ds-comment-body"><div class="ds-comment-header">', r.url ? (t += '<a class="ds-user-name ds-highlight" data-qqt-account="' + (r.qqt_account || "") + '" href="' + u(r.url) + '" ', r.user_id && (t += " onclick=\"this.href='" + a() + "/user-url/?user_id=" + r.user_id + "';\""), t += ' rel="nofollow" target="_blank"', r.user_id && (t += ' data-user-id="' + r.user_id + '"'), t += ">" + u(r.name) + "</a>") : (t += '<span class="ds-user-name"', r.user_id && (t += ' data-user-id="' + r.user_id + '"'), t += ' data-qqt-account="' + (r.qqt_account || "") + '">' + u(r.name) + "</span>"), t += '<span class="ua">' + sskua(s.agent) + '</span><span class="ua">' + sskos(s.agent) + "</span>", t += "</div>", 1 == i.max_depth && i.show_context && s.parents.length) {
+			s.message = s.message.replace(/http:\/\/static\.duoshuo\.com\//g, "https://static.duoshuo.com/");
+			s.message = s.message.replace(/http:\/\/img\.t\.sinajs\.cn\//g, "https://o36vpu6ui.qnssl.com/");
+			if (t += '<li class="ds-post" data-post-id="' + s.post_id + '"><div class="ds-post-self" data-post-id="' + s.post_id + '" data-thread-id="' + s.thread_id + '" data-root-id="' + s.root_id + '" data-source="' + s.source + '"><div class="ds-avatar"', r.user_id && (t += ' data-user-id="' + r.user_id + '"'), t += ">" + et.avatar(r), S.sourceName[s.source] && (t += et.serviceIcon(s.source)), t += '</div><div class="ds-comment-body"><div class="ds-comment-header">', r.url ? (t += '<a class="ds-user-name ds-highlight" data-qqt-account="' + (r.qqt_account || "") + '" href="' + u(r.url) + '" ', r.user_id && (t += " onclick=\"this.href='" + a() + "/user-url/?user_id=" + r.user_id + "';\""), t += ' rel="nofollow" target="_blank"', r.user_id && (t += ' data-user-id="' + r.user_id + '"'), t += ">" + u(r.name) + "</a>") : (t += '<span class="ds-user-name"', r.user_id && (t += ' data-user-id="' + r.user_id + '"'), t += ' data-qqt-account="' + (r.qqt_account || "") + '">' + u(r.name) + "</span>"), t += "</div>", 1 == i.max_depth && i.show_context && s.parents.length) {
 				t += '<ol id="ds-ctx">';
-				var n = ct.getJSON(s.parents);
-				if (n) {
-					for (var o, d = -1,
-					l = n.length - 1; l > d;) {
-						o = n[d += 1],
-						1 == d && s.parents.length > 2 && (t += '<li class="ds-ctx-entry"><a href="javascript:void(0);" class="ds-expand">还有' + (s.parents.length - 2) + "条评论</a></li>"),
-						t += tt.ctxPost({
-							post: o,
-							index: d,
-							hidden: d && d < s.parents.length - 1
-						})
-					}
-				}
+				var n = lt.getJSON(s.parents);
+				if (n) for (var o, d = -1,
+				l = n.length - 1; l > d;) o = n[d += 1],
+				1 == d && s.parents.length > 2 && (t += '<li class="ds-ctx-entry"><a href="javascript:void(0);" class="ds-expand">还有' + (s.parents.length - 2) + "条评论</a></li>"),
+				t += et.ctxPost({
+					post: o,
+					index: d,
+					hidden: d && d < s.parents.length - 1
+				});
 				t += "</ol>"
 			}
-			if (t += "<p>", s.parents.length >= i.max_depth && (!i.show_context || i.max_depth > 1) && s.parent_id && ct[s.parent_id] && (t += '<a class="ds-comment-context" data-post-id="' + s.post_id + '" data-parent-id="' + s.parent_id + '">' + D.reply_to + u(ct[s.parent_id].toJSON().author.name) + ": </a>"), t += s.message + '</p><div class="ds-comment-footer ds-comment-actions', s.vote > 0 && (t += " ds-post-liked"), t += '">', t += s.url ? tt.timeAnchor(s.created_at, s.url) : tt.timeText(s.created_at), "duoshuo" == s.source ? (t += '<a class="ds-post-reply" href="javascript:void(0);"><span class="ds-icon ds-icon-reply"></span>' + D.reply + "</a>" + tt.likePost(s) + '<a class="ds-post-repost" href="javascript:void(0);"><span class="ds-icon ds-icon-share"></span>' + D.repost + '</a><a class="ds-post-report" href="javascript:void(0);"><span class="ds-icon ds-icon-report"></span>' + D.report + "</a>", s.privileges["delete"] && (t += '<a class="ds-post-delete" href="javascript:void(0);"><span class="ds-icon ds-icon-delete"></span>' + D["delete"] + "</a>")) : ("qqt" == s.source || "weibo" == s.source) && (t += '<a class="ds-weibo-comments" href="javascript:void(0);">' + D.comments, s.type.match(/\-comment$/) || (t += '(<span class="ds-count">' + s.comments + "</span>)"), t += '</a><a class="ds-weibo-reposts" href="javascript:void(0);">' + D.reposts, s.type.match(/\-comment$/) || (t += '(<span class="ds-count">' + s.reposts + "</span>)"), t += "</a>"), t += "</div></div></div>", i.max_depth > 1 && (s.childrenArray || s.children) && "weibo" != s.source && "qqt" != s.source) {
+			if (t += "<p>", s.parents.length >= i.max_depth && (!i.show_context || i.max_depth > 1) && s.parent_id && lt[s.parent_id] && (t += '<a class="ds-comment-context" data-post-id="' + s.post_id + '" data-parent-id="' + s.parent_id + '">' + D.reply_to + u(lt[s.parent_id].toJSON().author.name) + ": </a>"), t += s.message + '</p><div class="ds-comment-footer ds-comment-actions', s.vote > 0 && (t += " ds-post-liked"), t += '">', t += s.url ? et.timeAnchor(s.created_at, s.url) : et.timeText(s.created_at), "duoshuo" == s.source ? (t += '<a class="ds-post-reply" href="javascript:void(0);"><span class="ds-icon ds-icon-reply"></span>' + D.reply + "</a>" + et.likePost(s) + '<a class="ds-post-repost" href="javascript:void(0);"><span class="ds-icon ds-icon-share"></span>' + D.repost + '</a><a class="ds-post-report" href="javascript:void(0);"><span class="ds-icon ds-icon-report"></span>' + D.report + "</a>", s.privileges["delete"] && (t += '<a class="ds-post-delete" href="javascript:void(0);"><span class="ds-icon ds-icon-delete"></span>' + D["delete"] + "</a>")) : ("qqt" == s.source || "weibo" == s.source) && (t += '<a class="ds-weibo-comments" href="javascript:void(0);">' + D.comments, s.type.match(/\-comment$/) || (t += '(<span class="ds-count">' + s.comments + "</span>)"), t += '</a><a class="ds-weibo-reposts" href="javascript:void(0);">' + D.reposts, s.type.match(/\-comment$/) || (t += '(<span class="ds-count">' + s.reposts + "</span>)"), t += "</a>"), t += "</div></div></div>", i.max_depth > 1 && (s.childrenArray || s.children) && "weibo" != s.source && "qqt" != s.source) {
 				t += '<ul class="ds-children">';
-				var c = ct.getJSON(s.childrenArray || s.children);
-				if (c) {
-					for (var s, d = -1,
-					p = c.length - 1; p > d;) {
-						s = c[d += 1],
-						t += tt.post({
-							post: s,
-							options: i
-						})
-					}
-				}
+				var c = lt.getJSON(s.childrenArray || s.children);
+				if (c) for (var s, d = -1,
+				p = c.length - 1; p > d;) s = c[d += 1],
+				t += et.post({
+					post: s,
+					options: i
+				});
 				t += "</ul>"
 			}
 			return t += "</li>"
 		},
-		tt.postListHead = function(e) {
+		et.postListHead = function(e) {
 			var t = '<div class="ds-comments-info"><div class="ds-sort"><a class="ds-order-desc">' + D.latest + '</a><a class="ds-order-asc">' + D.earliest + '</a><a class="ds-order-hot">' + D.hottest + '</a></div><ul class="ds-comments-tabs"><li class="ds-tab"><a class="ds-comments-tab-duoshuo ds-current" href="javascript:void(0);"></a></li>';
 			return e.options.show_reposts && e.thread.reposts && (t += '<li class="ds-tab"><a class="ds-comments-tab-repost" href="javascript:void(0);"></a></li>'),
 			t += " ",
@@ -1153,21 +1028,46 @@ function(e, t, s) {
 			e.options.show_qqt && e.thread.qqt_reposts && (t += '<li class="ds-tab"><a class="ds-comments-tab-qqt" href="javascript:void(0);"></a></li>'),
 			t += "</ul></div>"
 		},
-		tt.recentVisitors = function(e) {
+		et.recentVisitors = function(e) {
 			var t = "",
 			s = e.response;
-			if (s) {
-				for (var a, i = -1,
+			if (s) for (var a, i = -1,
+			r = s.length - 1; r > i;) a = s[i += 1],
+			t += '<div class="ds-avatar">' + et.avatar(a, e.options.avatar_size) + "</div>";
+			return t
+		},
+		et["related-read"] = function(e) {
+			var t = "";
+			if (e && e.length) {
+				t += '<article class="ds-reads-expand"><div class="ds-header">头条推荐</div><section> ';
+				var s = e;
+				if (s) for (var a, i = -1,
 				r = s.length - 1; r > i;) {
-					a = s[i += 1],
-					t += '<div class="ds-avatar">' + tt.avatar(a, e.options.avatar_size) + "</div>"
+					if (a = s[i += 1], t += ' <a href="' + a.url + '" class="ds-reads-item"> ', 3 == a.imgs.length) {
+						t += " <h2>" + a.title + '</h2> <div class="ds-reads-pics"> <ul> ';
+						var n = a.imgs;
+						if (n) for (var o, d = -1,
+						l = n.length - 1; l > d;) o = n[d += 1],
+						t += ' <li> <div class="ds-reads-dumb"></div> <div class="ds-reads-pic-wrap" style="background-image:url(' + o + ');"></div> </li> ';
+						t += ' </ul> </div> <div class="ds-reads-info"> ',
+						1 == a.type && (t += ' <span class="ds-reads-app-special">打开头条阅读</span> '),
+						t += ' <span class="ds-reads-date" data-date="' + a.timeStamp + '"></span> </div> '
+					} else t += ' <div class="ds-reads-desc ',
+					a.imgs.length || (t += "ds-reads-only"),
+					t += '"> <div class="ds-reads-title">' + a.title + '</div> <div class="ds-reads-info"> ',
+					1 == a.type && (t += ' <span class="ds-reads-app-special">打开头条阅读</span> '),
+					t += ' <span class="ds-reads-date" data-date="' + a.timeStamp + '"></span> </div> </div> ',
+					a.imgs.length && (t += ' <div class="ds-reads-pic-right"> <div class="ds-reads-dumb"></div> <div class="ds-reads-pic-wrap" style="background-image:url(' + a.imgs[0] + ');"> ', a.hasVideo && (t += ' <div class="ds-reads-vid-info"><span>' + a.videoDuration + "</span></div> "), t += " </div> </div> "),
+					t += " ";
+					t += " </a> "
 				}
+				t += "</section></article>"
 			}
 			return t
 		},
-		tt.replybox = function(e) {
+		et.replybox = function(e) {
 			var t = '<div class="ds-replybox"><a class="ds-avatar"';
-			if (t += r() ? ' href="javascript:void(0);" onclick="return false"': ' href="' + j.REMOTE + "/settings/avatar/" + T(q()) + '" target="_blank" title="设置头像"', t += ">" + tt.avatarImg(ot.data) + '</a><form method="post">' + st(e.params) + '<div class="ds-textarea-wrapper ds-rounded-top"><textarea name="message" title="Ctrl+Enter快捷提交" placeholder="' + u(D.leave_a_message) + '"></textarea><pre class="ds-hidden-text"></pre>', t += "</div>", t += '<div class="ds-post-toolbar"><div class="ds-post-options ds-gradient-bg"><span class="ds-sync">', !r() && ot.data.repostOptions) {
+			if (t += r() ? ' href="javascript:void(0);" onclick="return false"': ' href="' + S.REMOTE + "/settings/avatar/" + x(T()) + '" target="_blank" title="设置头像"', t += ">" + et.avatarImg(nt.data) + '</a><form method="post">' + tt(e.params) + '<div class="ds-textarea-wrapper ds-rounded-top"><textarea name="message" title="Ctrl+Enter快捷提交" placeholder="' + u(D.leave_a_message) + '"></textarea><pre class="ds-hidden-text"></pre>', t += "</div>", t += '<div class="ds-post-toolbar"><div class="ds-post-options ds-gradient-bg"><span class="ds-sync">', !r() && nt.data.repostOptions) {
 				t += '<input id="ds-sync-checkbox',
 				e.inline && (t += "-inline"),
 				t += '" type="checkbox" name="repost" ',
@@ -1175,9 +1075,7 @@ function(e, t, s) {
 				t += 'value="' + e.repostArray.join(",") + '"> <label for="ds-sync-checkbox',
 				e.inline && (t += "-inline"),
 				t += '">' + D.share_to + "</label>";
-				for (var s in ot.data.repostOptions) {
-					t += tt.serviceIcon(s, !ot.data.repostOptions[s])
-				}
+				for (var s in nt.data.repostOptions) t += et.serviceIcon(s, !nt.data.repostOptions[s])
 			}
 			return t += "</span>",
 			t += "</div>",
@@ -1187,145 +1085,119 @@ function(e, t, s) {
 			t += "</div></div>",
 			t += "</form></div>"
 		},
-		tt.serviceBindList = function(e) {
+		et.serviceBindList = function(e) {
 			var t = "",
 			s = e;
-			if (s) {
-				for (var a, i = -1,
-				r = s.length - 1; r > i;) {
-					a = s[i += 1],
-					t += '<li><a href="' + X.bindUrl(a) + '" rel="nofollow" class="ds-service-link ds-' + a + '">' + j.serviceNames[a],
-					ot.data.social_uid[a] && (t += ' <span class="ds-icon ds-icon-ok"></span>'),
-					t += "</a></li>"
-				}
-			}
+			if (s) for (var a, i = -1,
+			r = s.length - 1; r > i;) a = s[i += 1],
+			t += '<li><a href="' + Z.bindUrl(a) + '" rel="nofollow" class="ds-service-link ds-' + a + '">' + S.serviceNames[a],
+			nt.data.social_uid[a] && (t += ' <span class="ds-icon ds-icon-ok"></span>'),
+			t += "</a></li>";
 			return t
 		},
-		tt.serviceList = function(e) {
+		et.serviceList = function(e) {
 			var t = "",
 			s = e;
-			if (s) {
-				for (var a, i = -1,
-				r = s.length - 1; r > i;) {
-					a = s[i += 1],
-					t += '<li><a href="' + X.loginUrl(a) + '" rel="nofollow" class="ds-service-link ds-' + a + '">' + j.serviceNames[a] + "</a></li>"
-				}
-			}
+			if (s) for (var a, i = -1,
+			r = s.length - 1; r > i;) a = s[i += 1],
+			t += '<li><a href="' + Z.loginUrl(a) + '" rel="nofollow" class="ds-service-link ds-' + a + '">' + S.serviceNames[a] + "</a></li>";
 			return t
 		},
-		tt.shareWidget = function(e) {
+		et.shareWidget = function(e) {
 			var t = '<div class="ds-share-icons"> <div class="ds-share-icons-inner"> <ul class="ds-share-icons-16"> ',
 			s = e.services;
-			if (s) {
-				for (var a, i = -1,
-				r = s.length - 1; r > i;) {
-					a = s[i += 1],
-					t += ' <li> <a class="ds-' + a + '" href="javascript:void(0);" data-service="' + a + '">' + j.sourceName[a] + "</a> </li> "
-				}
-			}
+			if (s) for (var a, i = -1,
+			r = s.length - 1; r > i;) a = s[i += 1],
+			t += ' <li> <a class="ds-' + a + '" href="javascript:void(0);" data-service="' + a + '">' + S.sourceName[a] + "</a> </li> ";
 			return t += ' </ul> </div> <div class="ds-share-icons-footer">' + e.copyright + "</div></div>"
 		},
-		tt.smiliesTooltip = function(e) {
+		et.smiliesTooltip = function(e) {
 			var t = '<div id="ds-smilies-tooltip"><ul class="ds-smilies-tabs">';
-			for (var s in e) {
-				t += "<li><a>" + s + "</a></li>"
-			}
+			for (var s in e) t += "<li><a>" + s + "</a></li>";
 			return t += '</ul><div class="ds-smilies-container"></div></div>'
 		},
-		tt.toolbar = function() {
-			var e = '<div class="ds-toolbar"><div class="ds-account-control"><span class="ds-icon ds-icon-settings"></span> <span>帐号管理</span><ul><li><a class="ds-bind-more" href="javascript:void(0);" style="border-top: none">绑定更多</a></li><li><a target="_blank" href="' + j.REMOTE + "/settings/" + T(q()) + '">' + u(D.settings) + '</a></li><li><a rel="nofollow" href="' + X.logoutUrl() + '" style="border-bottom: none">登出</a></li></ul></div><div class="ds-visitor">';
-			return e += ot.data.url ? '<a class="ds-visitor-name" href="' + u(ot.data.url) + '" target="_blank">' + u(ot.data.name) + "</a>": '<span class="ds-visitor-name">' + u(ot.data.name) + "</span>",
+		et.toolbar = function() {
+			var e = '<div class="ds-toolbar"><div class="ds-account-control"><span class="ds-icon ds-icon-settings"></span> <span>帐号管理</span><ul><li><a class="ds-bind-more" href="javascript:void(0);" style="border-top: none">绑定更多</a></li><li><a target="_blank" href="' + S.REMOTE + "/settings/" + x(T()) + '">' + u(D.settings) + '</a></li><li><a rel="nofollow" href="' + Z.logoutUrl() + '" style="border-bottom: none">登出</a></li></ul></div><div class="ds-visitor">';
+			return e += nt.data.url ? '<a class="ds-visitor-name" href="' + u(nt.data.url) + '" target="_blank">' + u(nt.data.name) + "</a>": '<span class="ds-visitor-name">' + u(nt.data.name) + "</span>",
 			e += '<a class="ds-unread-comments-count" href="javascript:void(0);" title="新回复"></a></div></div>'
 		},
-		tt.topThreads = function(e) {
+		et.topThreads = function(e) {
 			var t = "",
 			s = e.response;
-			if (s) {
-				for (var a, i = -1,
-				r = s.length - 1; r > i;) {
-					a = s[i += 1],
-					t += '<li><a target="_blank" href="' + u(a.url) + '" title="' + u(a.title) + '">' + u(a.title) + "</a></li>"
-				}
-			}
+			if (s) for (var a, i = -1,
+			r = s.length - 1; r > i;) a = s[i += 1],
+			t += '<li><a target="_blank" href="' + u(a.url) + '" title="' + u(a.title) + '">' + u(a.title) + "</a></li>";
 			return t
 		},
-		tt.topUsers = function(e) {
+		et.topUsers = function(e) {
 			var t = "",
 			s = e.response;
-			if (s) {
-				for (var a, i = -1,
-				r = s.length - 1; r > i;) {
-					a = s[i += 1],
-					t += '<div class="ds-avatar">' + tt.avatar(a, e.options.avatar_size) + "<h4>" + u(a.name) + "</h4></div>"
-				}
-			}
+			if (s) for (var a, i = -1,
+			r = s.length - 1; r > i;) a = s[i += 1],
+			t += '<div class="ds-avatar">' + et.avatar(a, e.options.avatar_size) + "<h4>" + u(a.name) + "</h4></div>";
 			return t
 		},
-		tt.userInfo = function(e) {
-			var t = '<a href="' + u(e.url) + '" onclick="this.href=\'' + a() + "/user-url/?user_id=" + e.user_id + '\';" class="ds-avatar" target="_blank">' + tt.avatarImg(e) + '</a><a href="' + u(e.url) + '" onclick="this.href=\'' + a() + "/user-url/?user_id=" + e.user_id + '\';" class="ds-user-name ds-highlight" target="_blank">' + u(e.name) + "</a>";
-			for (var s in e.social_uid) {
-				t += '<a href="' + j.REMOTE + "/user-proxy/" + s + "/" + e.social_uid[s] + '/" target="_blank" class="ds-service-icon ds-' + s + '" title="' + j.sourceName[s] + '"></a>'
-			}
-			return t += '<p class="ds-user-card-meta"><a href="' + j.REMOTE + "/profile/" + e.user_id + '/" target="_blank"><span class="ds-highlight">' + e.comments + "</span>条评论</a></p>",
+		et.userInfo = function(e) {
+			var t = '<a href="' + u(e.url) + '" onclick="this.href=\'' + a() + "/user-url/?user_id=" + e.user_id + '\';" class="ds-avatar" target="_blank">' + et.avatarImg(e) + '</a><a href="' + u(e.url) + '" onclick="this.href=\'' + a() + "/user-url/?user_id=" + e.user_id + '\';" class="ds-user-name ds-highlight" target="_blank">' + u(e.name) + "</a>";
+			for (var s in e.social_uid) t += '<a href="' + S.REMOTE + "/user-proxy/" + s + "/" + e.social_uid[s] + '/" target="_blank" class="ds-service-icon ds-' + s + '" title="' + S.sourceName[s] + '"></a>';
+			return t += '<p class="ds-user-card-meta"><a href="' + S.REMOTE + "/profile/" + e.user_id + '/" target="_blank"><span class="ds-highlight">' + e.comments + "</span>条评论</a></p>",
 			e.description && (t += '<p class="ds-user-description">' + u(e.description) + "</p>"),
 			t
 		};
-		var at = j.Views = {},
-		it = (j.Callbacks = {},
-		j.pagelets = []),
-		rt = j.events = new Q,
-		nt = j.site = new $,
-		ot = j.visitor = new F,
-		dt = j.unread = new $,
-		lt = j.threadPool = new Z(Y),
-		ct = j.postPool = new Z(G),
-		ut = j.userPool = new Z(F);
-		rt.on("queryDefined",
+		var st = S.Views = {},
+		at = (S.Callbacks = {},
+		S.pagelets = []),
+		it = S.events = new J,
+		rt = S.site = new V,
+		nt = S.visitor = new $,
+		ot = S.unread = new V,
+		dt = S.threadPool = new G(Y),
+		lt = S.postPool = new G(F),
+		ct = S.userPool = new G($);
+		it.on("queryDefined",
 		function() {
 			var e = c.short_name;
 			if (c.theme && n(c.theme), m) {
 				var t = m["ds_site_" + e],
 				s = m["ds_lang_" + e];
-				t && nt.reset(p.parse(t)),
+				t && rt.reset(p.parse(t)),
 				s && o.extend(D, p.parse(s))
 			}
 		}),
-		C(),
-		j.require("embed.compat",
+		q(),
+		S.require("embed.compat",
 		function() {
-			function n(e) {
+			function i(e) {
 				e.stopPropagation()
 			}
-			function d(e) { (e.ctrlKey && 13 == e.which || 10 == e.which) && $(this.form).trigger("submit")
+			function n(e) { (e.ctrlKey && 13 == e.which || 10 == e.which) && H(this.form).trigger("submit")
 			}
-			function l() {
-				var e = $(this);
+			function d() {
+				var e = H(this);
 				e.height(Math.max(54, e.next(".ds-hidden-text").text(this.value).height() + 27))
 			}
-			function u() {
-				if (O.authInWin) {
+			function l() {
+				if (P.authInWin) {
 					var e = this.href.match(/\/(login|bind)\/(\w+)\//i);
-					if (e && j.serviceNames[e[2]]) {
-						return ! _(e[2], this.href)
-					}
+					if (e && S.serviceNames[e[2]]) return ! b(e[2], this.href)
 				}
 			}
-			function p() {
+			function u() {
 				var e, s, a, i, r, n = this,
 				o = 0,
 				d = 0;
 				t.selection && (s = t.selection.createRange(), s && s.parentElement() == n && (i = n.value.length, e = n.value.replace(/\r\n/g, "\n"), a = n.createTextRange(), a.moveToBookmark(s.getBookmark()), r = n.createTextRange(), r.collapse(!1), a.compareEndPoints("StartToEnd", r) > -1 ? o = d = i: (o = -a.moveStart("character", -i), o += e.slice(0, o).split("\n").length - 1, a.compareEndPoints("EndToEnd", r) > -1 ? d = i: (d = -a.moveEnd("character", -i), d += e.slice(0, d).split("\n").length - 1)))),
-				$(n).data("ds-range-start", o).data("ds-range-end", d)
+				H(n).data("ds-range-start", o).data("ds-range-end", d)
 			}
-			function f(e) {
-				return O.touch && e.addClass("ds-touch"),
+			function p(e) {
+				return P.touch && e.addClass("ds-touch"),
 				o.cssProperty("transition") || e.addClass("ds-no-transition"),
-				O.ie6 && e.addClass("ds-ie6"),
-				O.opacity || e.addClass("ds-no-opacity"),
+				P.ie6 && e.addClass("ds-ie6"),
+				P.opacity || e.addClass("ds-no-opacity"),
 				e
 			}
-			function b(e) {
-				if (!O.placeholder) {
+			function f(e) {
+				if (!P.placeholder) {
 					var t = e.attr("placeholder");
 					e.val(t).focus(function() {
 						this.value === t && (this.value = "")
@@ -1335,78 +1207,74 @@ function(e, t, s) {
 				}
 				return e
 			}
-			function y(e) {
-				if ("http://duoshuo.com" === e.origin) {
-					switch (e.data.type) {
-					case "login":
-						h.href = e.data.redirectUrl
-					}
+			function g(e) {
+				if ("http://duoshuo.com" === e.origin) switch (e.data.type) {
+				case "login":
+					h.href = e.data.redirectUrl
 				}
 			}
-			function _(t, s) {
+			function b(t, s) {
 				var a = {
 					weibo: [760, 600],
 					renren: [420, 322],
 					qq: [504, 445],
-					netease: [810, 645],
-					sohu: [972, 600],
-					google: [600, 440],
-					taobao: [480, 585]
+					weixin: [450, 550],
+					google: [600, 440]
 				} [t] || [550, 400];
 				return e.open(s + ( - 1 == s.indexOf("?") ? "?": "&") + o.param({
 					origin: h.origin || "http://" + h.host
 				}), "_blank", "width=" + a[0] + ",height=" + a[1] + ",toolbar=no,menubar=no,location=yes")
 			}
-			function x(e) {
-				var t = X[r() ? "loginUrl": "bindUrl"](e);
-				O.authInWin && _(e, t) || (h.href = t)
+			function y(e) {
+				var t = Z[r() ? "loginUrl": "bindUrl"](e);
+				P.authInWin && b(e, t) || (h.href = t)
 			}
-			function T() {
-				var e = L(tt["dialog-ask-for-auth"]({})).el.find(".ds-dialog").css("width", "300px");
-				e.find("a.ds-service-link").click(u)
+			function w() {
+				var e = E(et["dialog-ask-for-auth"]({})).el.find(".ds-dialog").css("width", "300px");
+				e.find("a.ds-service-link").click(l)
 			}
-			function q(e, t, s, a) {
+			function x(e, t, s, a) {
 				function i() {
 					function e(e) {
 						if (s && a) {
 							var t = s.options,
-							i = z(s.postList.el, e.response[a], t);
-							"asc" == t.order == ("top" == t.formPosition) && j.scrollTo(i);
+							i = A(s.postList.el, e.response[a], t);
+							"asc" == t.order == ("top" == t.formPosition) && S.scrollTo(i);
 							var r = s.el.find(".ds-comments-tab-" + a + " span.ds-highlight");
 							r.html(parseInt(r.html()) + 1)
 						}
 					}
-					return a || o.find("[type=checkbox]:checked")[0] ? (A.post("posts/repost", j.toJSON(o), e), n.close(), !1) : (alert("还没有选发布到哪儿呢"), !1)
+					return a || l.find("[type=checkbox]:checked")[0] ? (R.post("posts/repost", S.toJSON(l), e), o.close(), !1) : (alert("还没有选发布到哪儿呢"), !1)
 				}
 				function r() {
 					var e = this.value;
-					return this.checked && !ot.data.social_uid["qqt" == e ? "qq": e] ? void x(e) : void 0
+					return this.checked && !nt.data.social_uid["qqt" == e ? "qq": e] ? void y(e) : void 0
 				}
-				var n = L(tt["dialog-reposts"]({
+				var o = E(et["dialog-reposts"]({
 					post: e.toJSON(),
 					repostMessage: t,
 					service: a
 				})),
-				o = n.el.find("form");
-				return o.submit(i),
-				o.find(".ds-actions [type=checkbox]").change(r),
-				b(o.find("textarea")).keyup(d).keyup(l).focus(),
+				l = o.el.find("form");
+				return l.submit(i),
+				l.find(".ds-actions [type=checkbox]").change(r),
+				f(l.find("textarea")).keyup(n).keyup(d).focus(),
 				!1
 			}
-			function I(e) {
+			function T(e) {
 				var t = {
 					"unread-comments": {
 						title: "新留言及回复",
 						apiUrl: "users/unreadComments",
 						tmpl: function(e) {
-							return e.thread ? '<li data-thread-id="' + e.thread.thread_id + '">' + $.map(e.authors, tt.userAnchor).join("、") + ' 在 <a class="ds-read" href="' + e.thread.url + '#comments" target="_blank">' + k(e.thread.title || "无标题") + '</a> 中回复了你 <a class="ds-delete ds-read" title="知道了" href="javascript:void(0)">知道了</a></li>': ""
+							return e.thread ? '<li data-thread-id="' + e.thread.thread_id + '">' + H.map(e.authors, et.userAnchor).join("、") + ' 在 <a class="ds-read" href="' + e.thread.url + '#comments" target="_blank">' + _(e.thread.title || "无标题") + '</a> 中回复了你 <a class="ds-delete ds-read" title="知道了" href="javascript:void(0)">知道了</a></li>': ""
 						},
 						read: function(e) {
 							var t = e.attr("data-thread-id");
-							A.post("threads/read", {
+							R.post("threads/read", {
 								thread_id: t
 							}),
-							dt.data.comments--
+							ot.data.comments--
 						}
 					},
 					"unread-notifications": {
@@ -1417,158 +1285,147 @@ function(e, t, s) {
 						},
 						read: function(e) {
 							var t = e.attr("data-notification-id");
-							A.post("notifications/read", {
+							R.post("notifications/read", {
 								notification_id: t
 							}),
-							dt.data.notifications--
+							ot.data.notifications--
 						}
 					}
 				} [e],
-				s = L("<h2>" + t.title + '</h2><ul class="ds-unread-list"></ul>');
-				s.on("close", j.resetNotify);
+				s = E("<h2>" + t.title + '</h2><ul class="ds-unread-list"></ul>');
+				s.on("close", S.resetNotify);
 				var a = s.el.find(".ds-unread-list").delegate(".ds-delete", "click",
 				function() {
-					return $(this).parent().remove(),
+					return H(this).parent().remove(),
 					0 === a.children().length && s.close(),
 					!1
 				}).delegate(".ds-read", "click",
 				function() {
-					t.read($(this).parent())
+					t.read(H(this).parent())
 				});
-				$("#ds-notify").hide(),
-				A.get(t.apiUrl, {},
+				H("#ds-notify").hide(),
+				R.get(t.apiUrl, {},
 				function(e) {
-					s.el.find(".ds-unread-list").html($.map(e.response, t.tmpl).join("\n"))
-				}),
-				g && g.checkPermission() && g.requestPermission(i)
+					s.el.find(".ds-unread-list").html(H.map(e.response, t.tmpl).join("\n"))
+				})
 			}
-			function M() {
+			function N() {
 				bubbleOutTimer && (clearTimeout(bubbleOutTimer), bubbleOutTimer = 0)
 			}
-			function R() {
+			function I() {
 				bubbleOutTimer = setTimeout(function() {
 					bubbleOutTimer = 0,
-					et.detach()
+					X.detach()
 				},
 				400)
 			}
-			function z(e, t, s) {
-				return e.find(".ds-post[data-post-id=" + t.data.post_id + "]")[0] ? void 0 : (e.find(".ds-post-placeholder").remove(), $(tt.post({
+			function A(e, t, s) {
+				return e.find(".ds-post[data-post-id=" + t.data.post_id + "]")[0] ? void 0 : (e.find(".ds-post-placeholder").remove(), H(et.post({
 					post: t.toJSON(),
 					options: s
 				})).hide()["asc" == s.order ? "appendTo": "prependTo"](e).slideDown(function() {}))
 			}
-			function B(e, t) {
+			function U(e, t) {
 				function s() {
-					if (r()) {
-						return T(),
-						!1
-					}
-					var e = $(this).parent(),
+					if (r()) return w(),
+					!1;
+					var e = H(this).parent(),
 					t = e.hasClass("ds-post-liked"),
-					s = $(this).html().match(/\((\d+)\)/),
+					s = H(this).html().match(/\((\d+)\)/),
 					a = (s ? parseInt(s[1]) : 0) + (t ? -1 : 1);
-					return A.post("posts/vote", {
+					return R.post("posts/vote", {
 						post_id: e.closest(".ds-ctx-entry, .ds-post-self").attr("data-post-id"),
 						vote: t ? 0 : 1
 					}),
-					$(this).html($(this).html().replace(/\(\d+\)/, "") + (a ? "(" + a + ")": "")),
+					H(this).html(H(this).html().replace(/\(\d+\)/, "") + (a ? "(" + a + ")": "")),
 					e[t ? "removeClass": "addClass"]("ds-post-liked"),
 					!1
 				}
 				function a() {
-					var e = $(this).closest(".ds-post-self"),
-					t = ct[e.attr("data-post-id")];
-					return q(t, ""),
+					var e = H(this).closest(".ds-post-self"),
+					t = lt[e.attr("data-post-id")];
+					return x(t, ""),
 					!1
 				}
 				function i() {
-					if (!confirm("确定要删除这条评论吗？")) {
-						return ! 1
-					}
-					var t = $(this).closest(".ds-post-self");
-					return A.post("posts/remove", {
+					if (!confirm("确定要删除这条评论吗？")) return ! 1;
+					var t = H(this).closest(".ds-post-self");
+					return R.post("posts/remove", {
 						post_id: t.attr("data-post-id")
 					}),
 					t.parent().fadeOut(200,
 					function() {
 						e.data.comments--,
 						e.updateCounter("duoshuo"),
-						$(this).remove()
+						H(this).remove()
 					}),
 					!1
 				}
 				function n() {
-					if (!confirm("确定要举报这条评论吗？")) {
-						return ! 1
-					}
-					var e = $(this).closest(".ds-post-self");
-					return A.post("posts/report", {
+					if (!confirm("确定要举报这条评论吗？")) return ! 1;
+					var e = H(this).closest(".ds-post-self");
+					return R.post("posts/report", {
 						post_id: e.attr("data-post-id")
 					}),
 					alert("感谢您的反馈！"),
 					!1
 				}
 				function o() {
-					var s = $(this),
+					var s = H(this),
 					a = s.closest(".ds-comment-actions");
-					if (a.hasClass("ds-reply-active")) {
-						h.el.fadeOut(200,
-						function() {
-							$(this).detach()
-						}),
-						a.removeClass("ds-reply-active")
-					} else {
+					if (a.hasClass("ds-reply-active")) h.el.fadeOut(200,
+					function() {
+						H(this).detach()
+					}),
+					a.removeClass("ds-reply-active");
+					else {
 						var i = s.closest(".ds-ctx-entry, .ds-post-self");
-						h ? h.actionsBar.removeClass("ds-reply-active") : (h = new at.Replybox(e), h.render(!0).el.addClass("ds-inline-replybox").detach()),
+						h ? h.actionsBar.removeClass("ds-reply-active") : (h = new st.Replybox(e), h.render(!0).el.addClass("ds-inline-replybox").detach()),
 						h.el.find("[name=parent_id]").val(i.attr("data-post-id")),
 						h.el.show().appendTo(s.closest(".ds-ctx-body, .ds-comment-body")).find("textarea").focus(),
 						h.actionsBar = a.addClass("ds-reply-active"),
-						t.max_depth <= 1 ? h.postList = e.postList.el: (h.postList = i.siblings(".ds-children"), h.postList[0] || (h.postList = $('<ul class="ds-children"></ul>').insertAfter(i)))
+						t.max_depth <= 1 ? h.postList = e.postList.el: (h.postList = i.siblings(".ds-children"), h.postList[0] || (h.postList = H('<ul class="ds-children"></ul>').insertAfter(i)))
 					}
 					return ! 1
 				}
 				function d() {
 					function e(e) {
-						H(e),
-						i.append($.map(e.response,
+						W(e),
+						i.append(H.map(e.response,
 						function(e) {
-							return tt.post({
+							return et.post({
 								post: e,
 								options: t
 							})
 						}).join(""))
+					} {
+						var s = H(this).closest(".ds-post-self"),
+						a = s.attr("data-post-id");
+						s.data("source")
 					}
-					var s = $(this).closest(".ds-post-self"),
-					a = s.attr("data-post-id");
-					s.data("source");
-					if (0 != s.attr("data-root-id")) {
-						return ! 1
-					}
+					if (0 != s.attr("data-root-id")) return ! 1;
 					var i = s.siblings(".ds-children");
-					return i[0] ? (i.remove(), !1) : (i = $('<ul class="ds-children"></ul>').insertAfter(s), A.get("posts/listComments", J({
+					return i[0] ? (i.remove(), !1) : (i = H('<ul class="ds-children"></ul>').insertAfter(s), R.get("posts/listComments", B({
 						post_id: a
 					}), e), !1)
 				}
 				function l() {
-					var t = $(this).closest(".ds-post-self"),
-					s = ct[t.attr("data-post-id")],
+					var t = H(this).closest(".ds-post-self"),
+					s = lt[t.attr("data-post-id")],
 					a = s.data.source;
-					if (!ot.data.social_uid["qqt" == a ? "qq": a]) {
-						return void x(a)
-					}
+					if (!nt.data.social_uid["qqt" == a ? "qq": a]) return void y(a);
 					var i = s.data.root_id,
-					r = "0" != i ? ct[i] : s,
+					r = "0" != i ? lt[i] : s,
 					n = "";
 					if ("0" != i) {
 						var o = prepatePost(s.data).theAuthor;
 						n = ("weibo" == a ? "//@" + o.name: "|| @" + o.qqt_account) + ":" + s.data.message
 					}
-					return q(r, n, e, a),
+					return x(r, n, e, a),
 					!1
 				}
 				function c() {
-					var e = $(this).parent();
+					var e = H(this).parent();
 					return e.siblings().show(),
 					e.remove(),
 					!1
@@ -1577,90 +1434,81 @@ function(e, t, s) {
 					function t() {
 						function t(e) {
 							var t = e.response;
-							ut[c] ? ut[c].set(t) : ut[c] = new F(t),
-							et.owner == s && st.html(tt.userInfo(t))
+							ct[c] ? ct[c].set(t) : ct[c] = new $(t),
+							X.owner == s && K.html(et.userInfo(t))
 						}
-						rt = 0,
-						et.owner = s,
-						M();
+						tt = 0,
+						X.owner = s,
+						N();
 						var i = a.offset(),
 						r = e.el.offset(),
 						n = a.innerWidth() / 2,
 						o = e.el.innerHeight() - (i.top - r.top) + 6,
 						d = i.left - r.left - 35 + (n > 35 ? 35 : n);
 						try {
-							if (a.hasClass("ds-comment-context")) {
-								st.attr("id", "ds-ctx-bubble").attr("data-post-id", a.attr("data-post-id")).html('<ul id="ds-ctx">' + tt.ctxPost({
-									post: ct[a.attr("data-parent-id")].toJSON()
-								}) + '</ul><div class="ds-bubble-footer"><a class="ds-ctx-open" href="javascript:void(0);">查看对话</a></div>')
-							} else {
-								if (a.hasClass("ds-avatar") || a.hasClass("ds-user-name")) {
-									var l = {},
-									c = l.user_id = a.attr("data-user-id");
-									if (!c) {
-										throw "no info"
-									}
-									st.attr("id", "ds-user-card").attr("data-user-id", c).empty(),
-									ut[c] ? st.html(tt.userInfo(ut[c].data)) : A.get("users/profile", J(l), t)
-								}
+							if (a.hasClass("ds-comment-context")) K.attr("id", "ds-ctx-bubble").attr("data-post-id", a.attr("data-post-id")).html('<ul id="ds-ctx">' + et.ctxPost({
+								post: lt[a.attr("data-parent-id")].toJSON()
+							}) + '</ul><div class="ds-bubble-footer"><a class="ds-ctx-open" href="javascript:void(0);">查看对话</a></div>');
+							else if (a.hasClass("ds-avatar") || a.hasClass("ds-user-name")) {
+								var l = {},
+								c = l.user_id = a.attr("data-user-id");
+								if (!c) throw "no info";
+								K.attr("id", "ds-user-card").attr("data-user-id", c).empty(),
+								ct[c] ? K.html(et.userInfo(ct[c].data)) : R.get("users/profile", B(l), t)
 							}
-							et.css({
+							X.css({
 								bottom: o,
 								left: d
 							}).appendTo(e.innerEl)
 						} catch(u) {
-							et.detach()
+							X.detach()
 						}
 					}
 					var s = this;
-					if (bubbleOutTimer && et.owner == s) {
-						return clearTimeout(bubbleOutTimer),
-						void(bubbleOutTimer = 0)
-					}
-					var a = $(s);
-					rt = setTimeout(t, 200)
+					if (bubbleOutTimer && X.owner == s) return clearTimeout(bubbleOutTimer),
+					void(bubbleOutTimer = 0);
+					var a = H(s);
+					tt = setTimeout(t, 200)
 				}
 				function p() {
-					rt ? (clearTimeout(rt), rt = 0) : bubbleOutTimer || R()
+					tt ? (clearTimeout(tt), tt = 0) : bubbleOutTimer || I()
 				}
 				var h;
 				this.delegate("a.ds-post-likes", "click", s).delegate("a.ds-post-repost", "click", a).delegate("a.ds-post-delete", "click", i).delegate("a.ds-post-report", "click", n).delegate("a.ds-post-reply", "click", o).delegate("a.ds-weibo-comments", "click", d).delegate("a.ds-weibo-reposts", "click", l).delegate("a.ds-expand", "click", c),
-				O.touch || this.delegate("a.ds-comment-context, .ds-avatar, .ds-user-name", "mouseenter", u).delegate("a.ds-comment-context, .ds-avatar, .ds-user-name", "mouseleave", p)
+				P.touch || this.delegate("a.ds-comment-context, .ds-avatar, .ds-user-name", "mouseenter", u).delegate("a.ds-comment-context, .ds-avatar, .ds-user-name", "mouseleave", p)
 			}
-			function J(e) {
+			function B(e) {
 				var s = {
-					require: "site,visitor,nonce,lang" + (pt++?"": ",unread,log,extraCss"),
-					site_ims: W.get("ds_site_" + c.short_name + ":timestamp"),
-					lang_ims: W.get("ds_lang_" + c.short_name + ":timestamp"),
+					require: "site,visitor,nonce,lang" + (it++?"": ",unread,log,extraCss"),
+					site_ims: z.get("ds_site_" + c.short_name + ":timestamp"),
+					lang_ims: z.get("ds_lang_" + c.short_name + ":timestamp"),
 					referer: t.referrer
 				};
 				c.stylePatch && (s.style_patch = c.stylePatch);
-				for (var a in s) {
-					s[a] && (!O.ie6 || encodeURIComponent(s[a]).length < 200) && (e[a] = s[a])
-				}
+				for (var a in s) s[a] && (!P.ie6 || encodeURIComponent(s[a]).length < 200) && (e[a] = s[a]);
 				return e
 			}
-			var $ = j.jQuery,
-			Z = $(e),
-			K = $(t);
-			e.postMessage && (e.addEventListener ? e.addEventListener("message", y, !1) : e.attachEvent && e.attachEvent("onmessage", y)),
-			j.scrollTo = function(e) {
-				var t = e.offset().top; (t < Z.scrollTop() || t > Z.scrollTop() + Z.height()) && $("html, body").animate({
+			var H = S.jQuery,
+			V = H(e),
+			G = H(t);
+			e.postMessage && (e.addEventListener ? e.addEventListener("message", g, !1) : e.attachEvent && e.attachEvent("onmessage", g)),
+			S.scrollTo = function(e) {
+				var t = e.offset().top; (t < V.scrollTop() || t > V.scrollTop() + V.height()) && H("html, body").animate({
 					scrollTop: t - 40
 				},
 				200, "swing")
 			},
-			j.toJSON = function(e) {
+			S.toJSON = function(e) {
 				var t = /\r?\n/g,
 				s = /^(?:color|date|datetime|datetime-local|email|hidden|month|number|password|range|search|tel|text|time|url|week)$/i,
 				a = /^(?:select|textarea)/i,
 				i = e.map(function() {
-					return this.elements ? $.makeArray(this.elements) : this
+					return this.elements ? H.makeArray(this.elements) : this
 				}).filter(function() {
 					return this.name && !this.disabled && (this.checked || a.test(this.nodeName) || s.test(this.type))
 				}).map(function(e, s) {
-					var a = $(this).val();
-					return null == a ? null: $.isArray(a) ? $.map(a,
+					var a = H(this).val();
+					return null == a ? null: H.isArray(a) ? H.map(a,
 					function(e) {
 						return {
 							name: s.name,
@@ -1672,16 +1520,16 @@ function(e, t, s) {
 					}
 				}).toArray(),
 				r = {};
-				return $.each(i,
+				return H.each(i,
 				function() {
 					r[this.name] = this.value
 				}),
 				r
 			},
-			j.resetNotify = function() {
-				var e = $("#ds-notify"),
-				s = dt.data;
-				e[0] || (e = $('<div id="ds-notify"></div>').css({
+			S.resetNotify = function() {
+				var e = H("#ds-notify"),
+				s = ot.data;
+				e[0] || (e = H('<div id="ds-notify"></div>').css({
 					hidden: {
 						display: "none"
 					},
@@ -1693,18 +1541,18 @@ function(e, t, s) {
 						bottom: "24px",
 						right: "24px"
 					}
-				} [nt.data.notify_position]).delegate(".ds-notify-unread a", "click",
+				} [rt.data.notify_position]).delegate(".ds-notify-unread a", "click",
 				function() {
-					return I($(this).data("type")),
+					return T(H(this).data("type")),
 					!1
 				}).appendTo(t.body)),
-				e.html(tt.notify(s))[!s.comments && !s.notifications || "hidden" === nt.data.notify_position || $(".ds-dialog")[0] ? "hide": "show"]()
+				e.html(et.notify(s))[!s.comments && !s.notifications || "hidden" === rt.data.notify_position || H(".ds-dialog")[0] ? "hide": "show"]()
 			},
-			dt.on("reset", j.resetNotify),
-			at.Replybox = function(e) {
+			ot.on("reset", S.resetNotify),
+			st.Replybox = function(e) {
 				this.embedThread = e
 			},
-			at.Replybox.prototype = {
+			st.Replybox.prototype = {
 				render: function(e) {
 					function s(e) {
 						e.data("submitting", !0),
@@ -1715,44 +1563,42 @@ function(e, t, s) {
 						e.find(".ds-post-button").removeClass("ds-waiting").html(D.post)[0].disabled = !1
 					}
 					var i = this,
-					n = i.embedThread,
-					o = n.options,
-					c = function() {
-						j.require("smilies",
+					o = i.embedThread,
+					c = o.options,
+					p = function() {
+						S.require("smilies",
 						function() {})
 					},
 					h = {
-						thread: n,
-						options: o,
+						thread: o,
+						options: c,
 						inline: e,
 						params: {
-							thread_id: n.threadId,
+							thread_id: o.threadId,
 							parent_id: "",
-							nonce: j.nonce
+							nonce: S.nonce
 						},
 						repostArray: [],
 						checked: 0
 					};
-					for (var f in ot.data.repostOptions) {
-						ot.data.repostOptions[f] && (h.repostArray.push(f), h.checked = 1)
-					}
-					var v = i.el = $(tt.replybox(h)).click(c),
-					g = v.find("form"),
-					y = g.find("input[type=checkbox]")[0],
-					_ = g.find("a.ds-service-icon, a.ds-service-icon-grey"),
-					k = b(g.find("textarea")).focus(c).keyup(d).keyup(l).bind("focus mousedown mouseup keyup", p),
-					w = v.find(".ds-add-emote").click(function(e) {
-						var s = j.smiliesTooltip;
-						return w.toggleClass("ds-expanded").hasClass("ds-expanded") ? (s || (s = j.smiliesTooltip = new at.SmiliesTooltip, s.render(), j.require("smilies",
+					for (var v in nt.data.repostOptions) nt.data.repostOptions[v] && (h.repostArray.push(v), h.checked = 1);
+					var g = i.el = H(et.replybox(h)).click(p),
+					b = g.find("form"),
+					y = b.find("input[type=checkbox]")[0],
+					_ = b.find("a.ds-service-icon, a.ds-service-icon-grey"),
+					k = f(b.find("textarea")).focus(p).keyup(n).keyup(d).bind("focus mousedown mouseup keyup", u),
+					w = g.find(".ds-add-emote").click(function(e) {
+						var s = S.smiliesTooltip;
+						return w.toggleClass("ds-expanded").hasClass("ds-expanded") ? (s || (s = S.smiliesTooltip = new st.SmiliesTooltip, s.render(), S.require("smilies",
 						function() {
 							s.reset("微博-默认")
 						})), s.replybox = i, s.el.appendTo(t.body).css({
 							top: i.el.offset().top + i.el.outerHeight() + 4 + "px",
 							left: i.el.find(".ds-textarea-wrapper").offset().left + "px"
-						}), $(t.body).click(x)) : x(e),
+						}), H(t.body).click(x)) : x(e),
 						!1
 					}),
-					x = (v.find(".ds-add-image").click(function(e) {
+					x = (g.find(".ds-add-image").click(function(e) {
 						var s = k[0],
 						a = s.value,
 						i = "请输入图片地址",
@@ -1774,27 +1620,27 @@ function(e, t, s) {
 						e.preventDefault()
 					}), i.hideSmilies = function() {
 						w.removeClass("ds-expanded"),
-						j.smiliesTooltip.el.detach(),
-						$(t.body).unbind("click", x)
+						S.smiliesTooltip.el.detach(),
+						H(t.body).unbind("click", x)
 					}),
 					T = function(e, t) {
-						var s = L(tt["dialog-anonymous"]({
-							services: ["weibo", "qq", "renren", "kaixin", "douban", "netease", "sohu"],
-							options: o
+						var s = E(et["dialog-anonymous"]({
+							services: ["weixin", "weibo", "qq", "renren", "kaixin", "douban"],
+							options: c
 						})),
 						a = s.el.find(".ds-dialog").css("width", "320px");
-						if (a.find(".ds-icons-32 a").click(u), !o.deny_anonymous) {
+						if (a.find(".ds-icons-32 a").click(l), !c.deny_anonymous) {
 							var i = s.el.find("form");
 							i.submit(function() {
 								var e = i.find("input[name=author_email]").val();
-								return ! e && !o.require_guest_email || e.match(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/) ? (t(j.toJSON(i)), s.close(), !1) : (alert("请输入一个有效的email地址."), !1)
+								return ! e && !c.require_guest_email || e.match(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/) ? (t(S.toJSON(i)), s.close(), !1) : (alert("请输入一个有效的email地址."), !1)
 							}),
 							i.find("input[name=author_name]")[0].focus()
 						}
 					};
-					o.deny_anonymous && k.focus(function() {
+					c.deny_anonymous && k.focus(function() {
 						if (r()) {
-							T(g, q);
+							T(b, q);
 							var e = function(t) {
 								t.stopPropagation(),
 								k.unbind("click", e)
@@ -1804,62 +1650,58 @@ function(e, t, s) {
 						return ! 1
 					});
 					var q = function(e) {
-						s(g),
-						A.post("posts/create", $.extend(j.toJSON(g), e),
+						s(b),
+						R.post("posts/create", H.extend(S.toJSON(b), e),
 						function(e) {
-							var t = ct[e.response.post_id] = new G(e.response),
-							s = z(i.postList, t, o);
-							if ("asc" == o.order == ("top" == o.formPosition) && j.scrollTo(s), n.data.comments++, n.updateCounter("duoshuo"), k.val("").trigger("keyup"), a(g), v.hasClass("ds-inline-replybox") && (v.detach(), i.actionsBar.removeClass("ds-reply-active")), m) {
-								try {
-									m.removeItem("ds_draft_" + n.threadId)
-								} catch(r) {}
-							}
+							var t = lt[e.response.post_id] = new F(e.response),
+							s = A(i.postList, t, c);
+							if ("asc" == c.order == ("top" == c.formPosition) && S.scrollTo(s), o.data.comments++, o.updateCounter("duoshuo"), k.val("").trigger("keyup"), a(b), g.hasClass("ds-inline-replybox") && (g.detach(), i.actionsBar.removeClass("ds-reply-active")), m) try {
+								m.removeItem("ds_draft_" + o.threadId)
+							} catch(r) {}
 						},
 						function(e) {
-							a(g),
+							a(b),
 							alert(e.errorMessage)
 						})
 					};
-					g.submit(function() {
-						if (g.data("submitting")) {
-							return ! 1
-						}
-						var e = $.trim(g[0].message.value);
-						return "" == e || !O.placeholder && e == k.attr("placeholder") ? (alert("您还没写内容呢"), !1) : (r() ? T(g, q) : q(), !1)
+					b.submit(function() {
+						if (b.data("submitting")) return ! 1;
+						var e = H.trim(b[0].message.value);
+						return "" == e || !P.placeholder && e == k.attr("placeholder") ? (alert("您还没写内容呢"), !1) : (r() ? T(b, q) : q(), !1)
 					});
 					var C = function(e) {
-						return $(e).hasClass("ds-service-icon-grey") ? null: $(e).attr("data-service")
+						return H(e).hasClass("ds-service-icon-grey") ? null: H(e).attr("data-service")
 					};
 					if (_.click(function() {
-						return $(this).toggleClass("ds-service-icon-grey").toggleClass("ds-service-icon"),
-						y.value = $.map(_, C).join(","),
+						return H(this).toggleClass("ds-service-icon-grey").toggleClass("ds-service-icon"),
+						y.value = H.map(_, C).join(","),
 						y.checked = "" != y.value,
 						!1
-					}), $(y).change(function() {
+					}), H(y).change(function() {
 						var e = this.checked;
 						_[e ? "removeClass": "addClass"]("ds-service-icon-grey")[e ? "addClass": "removeClass"]("ds-service-icon"),
-						this.value = $.map(_, C).join(",")
+						this.value = H.map(_, C).join(",")
 					}), !e && m) {
-						var S = "ds_draft_" + n.threadId;
+						var j = "ds_draft_" + o.threadId;
 						k.bind("focus blur keyup",
 						function(e) {
-							var t = $(e.currentTarget).val();
+							var t = H(e.currentTarget).val();
 							try {
-								m[S] = t
+								m[j] = t
 							} catch(e) {}
 						}),
-						m[S] && k.val(m[S])
+						m[j] && k.val(m[j])
 					}
 					return this
 				}
 			},
-			at.Dialog = Q.extend({
-				init: function(e, t) { (this.el = $("#ds-wrapper"))[0] || (this.el = f($('<div id="ds-wrapper"></div>'))),
-					this.options = $.extend({
+			st.Dialog = J.extend({
+				init: function(e, t) { (this.el = H("#ds-wrapper"))[0] || (this.el = p(H('<div id="ds-wrapper"></div>'))),
+					this.options = H.extend({
 						width: 600
 					},
 					t),
-					e !== s && $(e).attr("id", "ds-reset").appendTo(this.el)
+					e !== s && H(e).attr("id", "ds-reset").appendTo(this.el)
 				},
 				open: function() {
 					function e(e) {
@@ -1871,42 +1713,42 @@ function(e, t, s) {
 					}
 					var a = this;
 					return a.el.hide().appendTo(t.body).fadeIn(200),
-					O.ie6 && a.el.css("top", Z.scrollTop() + 100),
+					P.ie6 && a.el.css("top", V.scrollTop() + 100),
 					a.el.show().find(".ds-dialog").delegate("a.ds-dialog-close", "click",
 					function() {
 						return a.close(),
 						!1
-					}).click(n),
-					K.keydown(e),
-					$(t.body).click(s),
+					}).click(i),
+					G.keydown(e),
+					H(t.body).click(s),
 					a.close = function() {
-						K.unbind("keydown", e),
-						$(t.body).unbind("click", s),
+						G.unbind("keydown", e),
+						H(t.body).unbind("click", s),
 						a.el.fadeOut(200,
 						function() {
-							$(this).remove()
+							H(this).remove()
 						}),
 						a.trigger("close")
 					},
 					a
 				}
 			}),
-			tt.likePanel = function(e) {
+			et.likePanel = function(e) {
 				return e.likes ? '<span class="ds-highlight">' + e.likes + "</span> 人喜欢": ""
 			},
-			at.Meta = function(e) {
+			st.Meta = function(e) {
 				this.embedThread = e
 			},
-			at.Meta.prototype = {
+			st.Meta.prototype = {
 				render: function() {
 					function a(a) {
 						function r(e) {
 							o.set(e),
-							i.resetLikePanel()
+							n.resetLikePanel()
 						}
 						function c() {
-							i.tooltip.detach(),
-							$(t.body).unbind("click", c)
+							n.tooltip.detach(),
+							H(t.body).unbind("click", c)
 						}
 						function u(t) {
 							switch (this.className) {
@@ -1914,23 +1756,19 @@ function(e, t, s) {
 								c(t);
 								break;
 							default:
-								if (!e.open(this.href, "_blank", "height=500,width=600,top=0,left=0,toolbar=no,menubar=no,resizable=yes,location=yes,status=no")) {
-									return
-								}
+								if (!e.open(this.href, "_blank", "height=500,width=600,top=0,left=0,toolbar=no,menubar=no,resizable=yes,location=yes,status=no")) return
 							}
 							return ! 1
 						}
 						var p = l.hasClass("ds-thread-liked");
-						if (A.post("threads/vote", {
-							thread_id: i.embedThread.threadId,
+						if (R.post("threads/vote", {
+							thread_id: n.embedThread.threadId,
 							vote: p ? 0 : 1
 						},
-						r), l.toggleClass("ds-thread-liked"), l.find(".ds-thread-like-text").text(p ? "喜欢": "已喜欢"), p) {
-							return i.tooltip && c(a),
-							!1
-						}
-						if (i.tooltip === s) {
-							var h = tt.likeTooltip({
+						r), l.toggleClass("ds-thread-liked"), l.find(".ds-thread-like-text").text(p ? "喜欢": "已喜欢"), p) return n.tooltip && c(a),
+						!1;
+						if (n.tooltip === s) {
+							var h = et.likeTooltip({
 								services: {
 									qzone: "QQ空间",
 									weibo: "新浪微博",
@@ -1938,38 +1776,36 @@ function(e, t, s) {
 									renren: "人人网",
 									kaixin: "开心网",
 									douban: "豆瓣网",
-									baidu: "百度搜藏",
-									netease: "网易微博",
-									sohu: "搜狐微博"
+									baidu: "百度搜藏"
 								},
 								thread_id: o.data.thread_id
 							});
-							i.tooltip = $(h).click(n).delegate("a", "click", u)
+							n.tooltip = H(h).click(i).delegate("a", "click", u)
 						}
 						var f = {};
 						return f.left = 0,
 						f.top = d.position().top + d.outerHeight() - 4 + "px",
-						i.tooltip.appendTo(i.embedThread.innerEl).css(f),
-						$(t.body).click(c),
+						n.tooltip.appendTo(n.embedThread.innerEl).css(f),
+						H(t.body).click(c),
 						!1
 					}
-					var i = this,
-					o = i.embedThread.model,
-					d = i.el = $(tt.meta(o.toJSON())),
+					var n = this,
+					o = n.embedThread.model,
+					d = n.el = H(et.meta(o.toJSON())),
 					l = d.find(".ds-like-thread-button");
 					return l.click(a),
-					i.resetLikePanel(),
+					n.resetLikePanel(),
 					r() && d.hide(),
-					i
+					n
 				},
 				resetLikePanel: function() {
-					this.el.find(".ds-like-panel").html(tt.likePanel(this.embedThread.model.toJSON()))
+					this.el.find(".ds-like-panel").html(et.likePanel(this.embedThread.model.toJSON()))
 				}
 			},
-			at.PostListHead = function(e) {
+			st.PostListHead = function(e) {
 				this.embedThread = e
 			},
-			at.PostListHead.prototype = {
+			st.PostListHead.prototype = {
 				render: function() {
 					function e(e) {
 						r.find("a.ds-current").removeClass("ds-current"),
@@ -1992,7 +1828,7 @@ function(e, t, s) {
 							a.params.source = "qqt",
 							s.replybox.el.hide()
 						}
-						return $(t).addClass("ds-current"),
+						return H(t).addClass("ds-current"),
 						a.refetch(),
 						!1
 					}
@@ -2001,12 +1837,12 @@ function(e, t, s) {
 						a.params.order = s.options.order = this.className.replace("ds-order-", ""),
 						a.params.page = 1,
 						a.refetch(),
-						$(this).addClass("ds-current"),
+						H(this).addClass("ds-current"),
 						!1
 					}
 					var s = this.embedThread,
 					a = s.postList,
-					i = this.el = $(tt.postListHead({
+					i = this.el = H(et.postListHead({
 						thread: s.model.toJSON(),
 						options: s.options
 					})),
@@ -2018,49 +1854,43 @@ function(e, t, s) {
 					this
 				}
 			},
-			at.Paginator = function(e) {
+			st.Paginator = function(e) {
 				function t() {
 					return i.params.page = parseInt(this.innerHTML),
 					i.refetch(),
 					a.find(".ds-current").removeClass("ds-current"),
-					$(this).addClass("ds-current"),
+					H(this).addClass("ds-current"),
 					!1
 				}
 				e = e || {};
 				var s = this,
-				a = s.el = e.el || $('<div class="ds-paginator"></div>'),
+				a = s.el = e.el || H('<div class="ds-paginator"></div>'),
 				i = s.collection = e.collection;
 				a.delegate("a", "click", t)
 			},
-			at.Paginator.prototype = {
+			st.Paginator.prototype = {
 				reset: function(e) {
 					function t(e) {
 						i.push('<a data-page="' + e + '" href="javascript:void(0);">' + e + "</a>")
 					}
 					var s, a = this.collection.params.page || 1,
 					i = [];
-					if (a > 1) {
-						for (t(1), s = a > 4 ? a - 2 : 2, s > 2 && i.push('<span class="page-break">...</span>'); a > s; s++) {
-							t(s)
-						}
-					}
+					if (a > 1) for (t(1), s = a > 4 ? a - 2 : 2, s > 2 && i.push('<span class="page-break">...</span>'); a > s; s++) t(s);
 					if (i.push('<a data-page="' + a + '" href="javascript:void(0);" class="ds-current">' + a + "</a>"), a < e.pages) {
-						for (s = a + 1; a + 4 >= s && s < e.pages; s++) {
-							t(s)
-						}
+						for (s = a + 1; a + 4 >= s && s < e.pages; s++) t(s);
 						s < e.pages && i.push('<span class="page-break">...</span>'),
 						t(e.pages)
 					}
 					this.el.html('<div class="ds-border"></div>' + i.join(" "))[e.pages > 1 ? "show": "hide"]()
 				}
 			},
-			j.addSmilies = function(e, t) {
-				var s = j.smiliesTooltip;
+			S.addSmilies = function(e, t) {
+				var s = S.smiliesTooltip;
 				s && s.el.find("ul.ds-smilies-tabs").append("<li><a>" + e + "</a></li>"),
-				j.smilies[e] = t
+				S.smilies[e] = t
 			},
-			at.SmiliesTooltip = function() {},
-			at.SmiliesTooltip.prototype = {
+			st.SmiliesTooltip = function() {},
+			st.SmiliesTooltip.prototype = {
 				render: function() {
 					function e() {
 						var e = s.replybox,
@@ -2084,8 +1914,8 @@ function(e, t, s) {
 						i.focus()
 					}
 					var s = this,
-					a = s.el = $(tt.smiliesTooltip(N));
-					return a.click(n).find("ul.ds-smilies-tabs").delegate("a", "click",
+					a = s.el = H(et.smiliesTooltip(L));
+					return a.click(i).find("ul.ds-smilies-tabs").delegate("a", "click",
 					function() {
 						s.reset(this.innerHTML)
 					}),
@@ -2094,9 +1924,9 @@ function(e, t, s) {
 				},
 				reset: function(e) {
 					function t(t, s) {
-						var i = 0 === e.indexOf("微博") ? "http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/" + s.replace("_org", "_thumb") : j.STATIC_URL + "/images/smilies/" + s;
+						var i = 0 === e.indexOf("微博") ? "https://o36vpu6ui.qnssl.com/t35/style/images/common/face/ext/normal/" + s.replace("_org", "_thumb") : S.STATIC_URL + "/images/smilies/" + s;
 						"WordPress" === e && (t = " " + t + " "),
-						a += '<li><img src="' + i + '" title="' + k(t) + '" /></li>'
+						a += '<li><img src="' + i + '" title="' + _(t) + '" /></li>'
 					}
 					var s = this.el.find("ul.ds-smilies-tabs");
 					s.find("a.ds-current").removeClass("ds-current"),
@@ -2104,33 +1934,33 @@ function(e, t, s) {
 						return this.innerHTML == e
 					}).addClass("ds-current");
 					var a = "<ul>";
-					return $.each(N[e], t),
+					return H.each(L[e], t),
 					a += "</ul>",
 					this.el.find(".ds-smilies-container").html(a),
 					this
 				}
 			},
-			tt.postPlaceholder = function() {
+			et.postPlaceholder = function() {
 				return ['<li class="ds-post ds-post-placeholder">', D.no_comments_yet, "</li>"].join("")
 			};
-			var et = $('<div id="ds-bubble"><div class="ds-bubble-content"></div><div class="ds-arrow ds-arrow-down ds-arrow-border"></div><div class="ds-arrow ds-arrow-down"></div></div>'),
-			st = et.find(".ds-bubble-content").delegate("a.ds-ctx-open", "click",
+			var X = H('<div id="ds-bubble"><div class="ds-bubble-content"></div><div class="ds-arrow ds-arrow-down ds-arrow-border"></div><div class="ds-arrow ds-arrow-down"></div></div>'),
+			K = X.find(".ds-bubble-content").delegate("a.ds-ctx-open", "click",
 			function() {
 				function e(e) {
 					function t(e, t) {
-						return tt.ctxPost({
+						return et.ctxPost({
 							post: e,
 							index: t
 						})
 					}
-					S.log($.map(e.response, t).join("\n"));
+					C.log(H.map(e.response, t).join("\n"));
 					s.el.find("ol");
-					s.el.find("ol").html($.map(e.response, t).join("\n"))
+					s.el.find("ol").html(H.map(e.response, t).join("\n"))
 				}
 				var t = {};
-				t.post_id = st.attr("data-post-id"),
-				A.get("posts/conversation", t, e);
-				var s = L('<h2>查看对话</h2><ol id="ds-ctx"></ol>');
+				t.post_id = K.attr("data-post-id"),
+				R.get("posts/conversation", t, e);
+				var s = E('<h2>查看对话</h2><ol id="ds-ctx"></ol>');
 				return s.el.find(".ds-dialog").css("width", "600px"),
 				s.el.find(".ds-dialog-body").css({
 					"max-height": "350px",
@@ -2140,57 +1970,138 @@ function(e, t, s) {
 				}),
 				!1
 			}),
-			rt = bubbleOutTimer = 0;
-			et.mouseenter(M).mouseleave(R),
-			at.PostList = function(e) {
+			tt = bubbleOutTimer = 0;
+			X.mouseenter(N).mouseleave(I),
+			st.PostList = function(e) {
 				e && (e.params && (this.params = e.params), e.embedThread && (this.embedThread = e.embedThread)),
-				this.el = $('<ul class="ds-comments"></ul>')
+				this.el = H('<ul class="ds-comments"></ul>')
 			},
-			at.PostList.prototype = {
+			st.PostList.prototype = {
 				url: "threads/listPosts",
 				render: function() {
-					return B.call(this.el, this.embedThread, this.embedThread.options),
+					return U.call(this.el, this.embedThread, this.embedThread.options),
 					this
 				},
 				reset: function(e) {
 					var t = this.embedThread.options;
-					this.el.html(e[0] ? $.map(ct.getJSON(e),
+					this.el.html(e[0] ? H.map(lt.getJSON(e),
 					function(e) {
-						return tt.post({
+						return et.post({
 							post: e,
 							options: t
 						})
-					}).join("") : tt.postPlaceholder())
+					}).join("") : et.postPlaceholder())
 				},
 				refetch: function() {
 					function e(e) {
-						ct.set(e.parentPosts || e.relatedPosts),
-						ut.set(e.users),
+						lt.set(e.parentPosts || e.relatedPosts),
+						ct.set(e.users),
 						s.reset(e.response),
 						s.embedThread.paginator.reset(e.cursor),
 						s.el.fadeTo(200, 1),
-						j.scrollTo(s.el),
+						S.scrollTo(s.el),
 						a.remove()
 					}
 					var s = this,
-					a = $(tt.indicator()).appendTo(t.body).fadeIn(200);
-					s.el.fadeTo(200, 0.5),
-					A.get(s.url, s.params, e)
+					a = H(et.indicator()).appendTo(t.body).fadeIn(200);
+					s.el.fadeTo(200, .5),
+					R.get(s.url, s.params, e)
 				}
 			},
-			at.EmbedThread = V.extend({
+			st.RelatedRead = function() {
+				this._init()
+			},
+			st.RelatedRead.prototype = {
+				uri: "base/recommend",
+				mountedAfter: [".detail_main .detail_con .d_img p:last", ".jun4_article .jun4_cententttt", "#content p:last", ".article .content p:last", ".artcontent p:last", '.card_box p>[src="http://cpro.baidustatic.com/cpro/ui/cm.js"]:eq(2)', ".mlrAuto .con_con p:last"],
+				mountedBefore: [".artcontent .relateNews", ".neirong_main .pagelist"],
+				_init: function() {
+					this.el = H('<div id="ds-related-reads"></div>'),
+					this._count_timer = null
+				},
+				_unpackImages: function(e) {
+					for (var t, s = e.image_list.slice(0, 3), a = []; s.length;) t = s.shift(),
+					a.push(t.medium_image);
+					return a
+				},
+				_transform: function(e) {
+					for (var t = [], s = 0, a = e.length; a > s; s++) t.push({
+						url: e[s].url,
+						title: e[s].title,
+						type: e[s].type,
+						source: e[s].source,
+						imgs: this._unpackImages(e[s]),
+						timeStamp: 1e3 * e[s].publish_time,
+						hasVideo: e[s].has_video,
+						videoDuration: this._parseVideoDuration(e[s].video_duraion)
+					});
+					return t
+				},
+				_parseVideoDuration: function(e) {
+					e = +e;
+					var t = Math.floor(e / 3600),
+					s = Math.floor((e - 60 * t * 60) / 60),
+					e = e - 60 * t * 60 - 60 * s,
+					a = "" + (t ? (10 > t ? "0" + t: t) + " : ": "") + (10 > s ? "0" + s: s) + " : " + (10 > e ? "0" + e: e);
+					return a
+				},
+				load: function(e) {
+					var t = this;
+					R.get(this.uri, {
+						thread_id: e,
+						url: h.href
+					},
+					function(e) {
+						0 == e.code ? t.render(e.response) : t.renderError()
+					})
+				},
+				mount: function(e) {
+					var t = H(this.mountedAfter.join(","));
+					if (t.length) try {
+						return void this.el.insertAfter(t)
+					} catch(s) {}
+					var a = H(this.mountedBefore.join(","));
+					if (a.length) try {
+						return void this.el.insertBefore(a)
+					} catch(s) {}
+					e.append(this.el)
+				},
+				renderError: function() {},
+				render: function(e) {
+					this.el.html(et["related-read"](this._transform(e)));
+					try {
+						this.count()
+					} catch(t) {}
+				},
+				count: function() {
+					var e = this; !
+					function t() {
+						clearTimeout(e._count_timer),
+						e.el.find(".ds-reads-date").each(function() {
+							var e, t, s, a, i, r, n = H(this).data("date"),
+							o = (new Date).getTime(),
+							d = o - n,
+							l = new Date(n);
+							d > 864e5 ? (e = l.getFullYear(), t = l.getMonth() + 1, s = l.getDate(), H(this).html(e + "年" + t + "月" + s + "日")) : d > 36e5 ? (a = Math.floor(d / 60 / 60 / 1e3), H(this).html(a + "小时前")) : d > 6e4 ? (i = Math.floor(d / 60 / 1e3), H(this).html(i + "分钟前")) : (r = Math.floor(d / 1e3), H(this).html(r + "秒前"))
+						}),
+						e._count_timer = setTimeout(t, 6e4)
+					} ()
+				},
+				stopCount: function() {
+					clearTimeout(this._count_timer)
+				}
+			},
+			st.EmbedThread = Q.extend({
 				uri: "threads/listPosts",
 				params: "thread-id local-thread-id source-thread-id thread-key category channel-key author-key author-id url limit order max-depth form-position container-url" + (v.match(/MSIE 6\.0/) ? "": " title image thumbnail"),
 				render: function() {
 					var e = this.el;
-					if ("请将此处替换成文章在你的站点中的ID" === e.data("thread-key")) {
-						return alert("请设置正确的 data-thread-key 属性"),
-						!1
-					}
-					e.attr("id", "ds-thread").append(tt.waitingImg());
+					if ("请将此处替换成文章在你的站点中的ID" === e.data("thread-key")) return alert("请设置正确的 data-thread-key 属性"),
+					!1;
+					e.attr("id", "ds-thread").append(et.waitingImg());
 					var t = e.width(),
-					s = e.data("url") || !e.attr("data-thread-id") && $("link[rel=canonical]").attr("href");
-					s ? e.data("url", w(s)) : e.data("container-url", h.href),
+					s = e.data("url") || !e.attr("data-thread-id") && H("link[rel=canonical]").attr("href");
+					s ? e.data("url", k(s)) : e.data("container-url", h.href),
 					t && 400 >= t && e.addClass("ds-narrow").data("max-depth", 1)
 				},
 				updateCounter: function(e) {
@@ -2203,11 +2114,9 @@ function(e, t, s) {
 						weibo: ["weibo_reposts", t(D.weibo_reposts_multiple) || "新浪微博"],
 						qqt: ["qqt_reposts", t(D.qqt_reposts_multiple) || "腾讯微博"]
 					};
-					for (var a in s) {
-						if (!e || e == a) {
-							var i = this.data[s[a][0]];
-							this.el.find(".ds-comments-tab-" + a).html(this.el.hasClass("ds-narrow") ? '<span class="ds-service-icon ds-' + a + '"></span>' + i: (i ? '<span class="ds-highlight">' + i + "</span>": "0") + s[a][1])
-						}
+					for (var a in s) if (!e || e == a) {
+						var i = this.data[s[a][0]];
+						this.el.find(".ds-comments-tab-" + a).html(this.el.hasClass("ds-narrow") ? '<span class="ds-service-icon ds-' + a + '"></span>' + i: (i ? '<span class="ds-highlight">' + i + "</span>": "0") + s[a][1])
 					}
 				},
 				onError: function(e) {
@@ -2218,20 +2127,21 @@ function(e, t, s) {
 					i = a.threadId = t.thread.thread_id,
 					n = t.cursor,
 					o = a.options = t.options,
-					d = a.innerEl = f($('<div id="ds-reset"></div>').appendTo(a.el));
+					d = a.innerEl = p(H('<div id="ds-reset"></div>').appendTo(a.el));
 					a.model = new Y(a.data = t.thread),
-					ct.set(t.parentPosts || t.relatedPosts),
-					ut.set(t.users),
+					lt.set(t.parentPosts || t.relatedPosts),
+					ct.set(t.users),
 					a.el.find("#ds-waiting").remove(),
-					o.like_thread_enabled && (a.meta = new at.Meta(a), d.append(a.meta.render().el)),
-					o.hot_posts && t.hotPosts && t.hotPosts.length && (a.hotPosts = new at.HotPosts($('<div class="ds-rounded"></div>'), {
+					t.options && t.options.show_recommend && (a.relatedRead = new st.RelatedRead, a.relatedRead.load(t.thread.thread_id), a.relatedRead.mount(d)),
+					o.like_thread_enabled && (a.meta = new st.Meta(a), d.append(a.meta.render().el)),
+					o.hot_posts && t.hotPosts && t.hotPosts.length && (a.hotPosts = new st.HotPosts(H('<div class="ds-rounded"></div>'), {
 						max_depth: 1,
 						show_context: o.show_context
 					}), a.hotPosts.thread = a, d.append(a.hotPosts.el), a.hotPosts.onload({
-						list: ct.getJSON(t.hotPosts)
+						list: lt.getJSON(t.hotPosts)
 					})),
-					a.postListHead = new at.PostListHead(a),
-					a.postList = new at.PostList({
+					a.postListHead = new st.PostListHead(a),
+					a.postList = new st.PostList({
 						embedThread: a,
 						params: {
 							source: "duoshuo",
@@ -2242,66 +2152,66 @@ function(e, t, s) {
 						}
 					}),
 					a.postList.render().reset(t.response),
-					a.paginator = new at.Paginator({
+					a.paginator = new st.Paginator({
 						collection: a.postList
 					}),
 					a.paginator.reset(n);
-					var l = a.replybox = new at.Replybox(a);
-					l.postList = a.postList.el,
-					r() ? a.loginButtons = $(tt.loginButtons()).delegate("a.ds-more-services", "click",
+					var c = a.replybox = new st.Replybox(a);
+					c.postList = a.postList.el,
+					r() ? a.loginButtons = H(et.loginButtons()).delegate("a.ds-more-services", "click",
 					function() {
 						return a.loginButtons.find(".ds-additional-services").toggle(),
 						!1
-					}).delegate("a.ds-service-link", "click", u) : a.toolbar = $(tt.toolbar()).delegate(".ds-account-control", "mouseenter",
+					}).delegate("a.ds-service-link", "click", l) : a.toolbar = H(et.toolbar()).delegate(".ds-account-control", "mouseenter",
 					function() {
-						$(this).addClass("ds-active")
+						H(this).addClass("ds-active")
 					}).delegate(".ds-account-control", "mouseleave",
 					function() {
-						$(this).removeClass("ds-active")
+						H(this).removeClass("ds-active")
 					}).delegate("a.ds-bind-more", "click",
 					function() {
-						var e = L(tt["dialog-bind-more"]()).el.find(".ds-dialog").addClass("ds-dialog-bind-more").css("width", "300px");
-						return e.find("a.ds-service-link").click(u),
+						var e = E(et["dialog-bind-more"]()).el.find(".ds-dialog").addClass("ds-dialog-bind-more").css("width", "300px");
+						return e.find("a.ds-service-link").click(l),
 						!1
 					}).delegate("a.ds-unread-comments-count", "click",
 					function() {
-						return I("unread-comments"),
+						return T("unread-comments"),
 						!1
 					});
-					var c = ['<a name="respond"></a>', a.toolbar || a.loginButtons, l.render().el];
-					"top" == o.formPosition && $.fn.append.apply(d, c),
+					var u = ['<a name="respond"></a>', a.toolbar || a.loginButtons, c.render().el];
+					"top" == o.formPosition && H.fn.append.apply(d, u),
 					d.append(a.postListHead.render().el, a.postList.el, a.paginator.el),
-					"bottom" == o.formPosition && $.fn.append.apply(d, c),
-					d.append(tt.poweredBy(o.poweredby_text)),
+					"bottom" == o.formPosition && H.fn.append.apply(d, u),
+					d.append(et.poweredBy(o.poweredby_text)),
 					a.updateCounter(),
-					t.alerts && $.each(t.alerts,
+					t.alerts && H.each(t.alerts,
 					function(e, t) {
-						$('<div class="ds-alert">' + t + "</div>").insertBefore(a.toolbar || loginButtons)
+						H('<div class="ds-alert">' + t + "</div>").insertBefore(a.toolbar || loginButtons)
 					}),
-					o.message && l.el.find("textarea").val(o.message).focus(),
-					dt.on("reset",
+					o.message && c.el.find("textarea").val(o.message).focus(),
+					ot.on("reset",
 					function() {
-						var e = dt.data.comments || 0;
+						var e = ot.data.comments || 0;
 						d.find("a.ds-unread-comments-count").html(e).attr("title", e ? "你有" + e + "条新回复": "你没有新回复").css("display", e ? "inline": "none")
 					}),
-					o.mzadx_id && (j.require("mzadxN",
-					function() {}), $('<div id="MZADX_' + o.mzadx_id + '" style="margin:0 auto;"></div>').appendTo(d), __mz_rpq = e.__mz_rpq || [], __mz_rpq.push({
+					o.mzadx_id && (S.require("mzadxN",
+					function() {}), H('<div id="MZADX_' + o.mzadx_id + '" style="margin:0 auto;"></div>').appendTo(d), __mz_rpq = e.__mz_rpq || [], __mz_rpq.push({
 						l: [o.mzadx_id],
 						r: "1",
 						_srv: "MZADX",
 						_callback: function() {}
 					})),
-					j.thread = a,
-					dt.data !== s && dt.trigger("reset"),
-					r() || U.send({
+					S.thread = a,
+					ot.data !== s && ot.trigger("reset"),
+					r() || M.send({
 						visit_thread_id: a.threadId
 					})
 				},
 				onMessage: function(e) {
-					z(this.postList.el, new G(e), this.options)
+					A(this.postList.el, new F(e), this.options)
 				}
 			}),
-			at.HotPosts = V.extend({
+			st.HotPosts = Q.extend({
 				tmpl: "hotPosts",
 				params: "show-quote",
 				render: function() {
@@ -2309,12 +2219,12 @@ function(e, t, s) {
 					this
 				},
 				onload: function(e) {
-					e.options = $.extend(this.options, e.options),
-					V.prototype.onload.call(this, e),
-					B.call(this.el.find("ul"), this.thread, this.options)
+					e.options = H.extend(this.options, e.options),
+					Q.prototype.onload.call(this, e),
+					U.call(this.el.find("ul"), this.thread, this.options)
 				}
 			}),
-			at.RecentComments = V.extend({
+			st.RecentComments = Q.extend({
 				tmpl: "commentList",
 				uri: "sites/listRecentPosts",
 				params: "show-avatars show-time show-title avatar-size show-admin excerpt-length num-items channel-key",
@@ -2323,41 +2233,41 @@ function(e, t, s) {
 				},
 				prepare: function(e) {
 					return {
-						list: $.map(e.response,
+						list: H.map(e.response,
 						function(e) {
-							return new G(e).toJSON()
+							return new F(e).toJSON()
 						})
 					}
 				}
 			}),
-			at.RecentVisitors = V.extend({
+			st.RecentVisitors = Q.extend({
 				tmpl: "recentVisitors",
 				uri: "sites/listVisitors",
 				params: "show-time avatar-size num-items channel-key",
 				render: function() {
 					this.el.children().detach(),
-					this.el.attr("id", "ds-recent-visitors").append(this.waitingEl = $(tt.waitingImg()))
+					this.el.attr("id", "ds-recent-visitors").append(this.waitingEl = H(et.waitingImg()))
 				}
 			}),
-			at.TopThreads = V.extend({
+			st.TopThreads = Q.extend({
 				tmpl: "topThreads",
 				uri: "sites/listTopThreads",
 				params: "range num-items channel-key",
 				render: function() {
 					this.el.children().detach(),
-					this.el.attr("id", "ds-top-threads").append(this.waitingEl = $(tt.waitingImg()))
+					this.el.attr("id", "ds-top-threads").append(this.waitingEl = H(et.waitingImg()))
 				}
 			}),
-			at.LoginWidget = V.extend({
+			st.LoginWidget = Q.extend({
 				tmpl: "loginWidget",
 				render: function() {
 					var e = this.el;
-					e.attr("id", "ds-login").html(tt.loginWidget(["weibo", "qq", "renren", "kaixin", "douban", "netease", "sohu"])),
-					e.find("a").click(u),
-					e.find("a.ds-logout").attr("href", X.logoutUrl())
+					e.attr("id", "ds-login").html(et.loginWidget(["weixin", "weibo", "qq", "renren", "kaixin", "douban"])),
+					e.find("a").click(l),
+					e.find("a.ds-logout").attr("href", Z.logoutUrl())
 				}
 			}),
-			at.ThreadCount = V.extend({
+			st.ThreadCount = Q.extend({
 				onload: function(e) {
 					var t = this.el,
 					s = t.data("count-type") || "comments",
@@ -2365,7 +2275,7 @@ function(e, t, s) {
 					t[t.data("replace") ? "replaceWith": "html"](D[s + "_" + (a ? a > 1 ? "multiple": "one": "zero")].replace("{num}", a))
 				}
 			}),
-			at.ShareWidget = V.extend({
+			st.ShareWidget = Q.extend({
 				tmpl: "shareWidget",
 				render: function() {
 					var e = {
@@ -2374,13 +2284,13 @@ function(e, t, s) {
 					};
 					this.el.attr("id", "ds-share"),
 					this.el.children().attr("id", "ds-reset"),
-					this.el.find(".ds-share-aside-inner").html(tt.shareWidget(e)),
-					this.el.find(".ds-share-icons-more").html(tt.shareWidget(e)),
+					this.el.find(".ds-share-aside-inner").html(et.shareWidget(e)),
+					this.el.find(".ds-share-icons-more").html(et.shareWidget(e)),
 					this.el.find(".ds-share-icons-more").hide(),
 					this.el.hasClass("flat") && this.el.find("a").each(function() {
-						$(this).addClass("flat")
+						H(this).addClass("flat")
 					}),
-					f(this.el),
+					p(this.el),
 					this.delegateEvents()
 				},
 				delegateEvents: function() {
@@ -2414,14 +2324,14 @@ function(e, t, s) {
 							i.delegate(".ds-share-aside-toggle", "mouseover",
 							function() {
 								var e = {},
-								s = O.ie6 && "right" === u;
+								s = P.ie6 && "right" === u;
 								s ? e.left = (t.documentElement.scrollLeft + t.documentElement.clientWidth - this.offsetWidth - (parseInt(this.currentStyle.marginLeft, 10) || 0) - parseInt(this.currentStyle.marginRight, 10) || 0) - 195 : e[u] = 0,
 								c.animate(e, 200)
 							}),
 							i.delegate(".ds-share-aside-inner", "mouseleave",
 							function() {
 								var e = {},
-								s = O.ie6 && "right" === u;
+								s = P.ie6 && "right" === u;
 								s ? e.left = (t.documentElement.scrollLeft + t.documentElement.clientWidth - this.offsetWidth - (parseInt(this.currentStyle.marginLeft, 10) || 0) - parseInt(this.currentStyle.marginRight, 10) || 0) + 230 : e[u] = -229,
 								c.animate(e, 200)
 							})
@@ -2437,21 +2347,19 @@ function(e, t, s) {
 					}
 					i.delegate("a", "click",
 					function(t) {
-						var s = $(this).data("service");
-						if (!i.data("url")) {
-							return void alert("请设置data-url")
-						}
+						var s = H(this).data("service");
+						if (!i.data("url")) return void alert("请设置data-url");
 						if ("wechat" === s) {
 							var r = a() + "/api/qrcode/getImage.png",
 							n = "?size=240&text=" + i.data("url"),
-							d = L(tt["dialog-qrcode"]({
+							d = E(et["dialog-qrcode"]({
 								qrcode_url: r + n,
 								url: i.data("url")
 							}));
 							d.el.find(".ds-dialog").css("width", "320px")
 						} else {
 							var l = a() + "/share-proxy/?" + o.param({
-								service: $(this).data("service"),
+								service: H(this).data("service"),
 								thread_key: i.data("threadKey"),
 								title: i.data("title"),
 								images: i.data("images"),
@@ -2465,66 +2373,62 @@ function(e, t, s) {
 					})
 				}
 			});
-			var pt = 0;
-			j.initSelector = function(e, t) {
+			var it = 0;
+			S.initSelector = function(e, t) {
 				function s(e) {
-					H(e),
+					W(e),
 					o.extend(D, e.options),
-					lt.set(e.response)
+					dt.set(e.response)
 				}
-				var a = []; ! C() || !$.isReady && P || $(e).each(function(e, s) {
-					var i = $(s);
+				var a = []; ! q() || !H.isReady && j || H(e).each(function(e, s) {
+					var i = H(s);
 					if (!i.data("initialized")) {
 						i.data("initialized", !0);
-						var r = new at[t.type](i, t);
-						if (it.push(r), "ThreadCount" === t.type) {
+						var r = new st[t.type](i, t);
+						if (at.push(r), "ThreadCount" === t.type) {
 							var n = i.attr("data-thread-key");
 							i.attr("data-channel-key") && (n = i.attr("data-channel-key") + ":" + n),
 							a.push(n),
-							lt[n] || (lt[n] = new Y({})),
-							lt[n].on("reset",
+							dt[n] || (dt[n] = new Y({})),
+							dt[n].on("reset",
 							function() {
 								r.onload(this)
 							})
-						} else {
-							if (r.uri) {
-								var o = {};
-								$.each(r.params.split(" "),
-								function(e, t) {
-									o[t.replace(/-/g, "_")] = i.attr("data-" + t) || i.data(t)
-								}),
-								A.get(r.uri, J(o),
-								function(e) {
-									r.load(e)
-								})
-							}
+						} else if (r.uri) {
+							var o = {};
+							H.each(r.params.split(" "),
+							function(e, t) {
+								o[t.replace(/-/g, "_")] = i.attr("data-" + t) || i.data(t)
+							}),
+							R.get(r.uri, B(o),
+							function(e) {
+								r.load(e)
+							})
 						}
 					}
 				}),
-				a.length && A.get("threads/counts", J({
+				a.length && R.get("threads/counts", B({
 					threads: a.join(",")
 				}), s)
 			},
-			(j.initView = function() {
-				$.each(E, j.initSelector)
+			(S.initView = function() {
+				H.each(O, S.initSelector)
 			})(),
-			$(function() {
+			H(function() {
 				if (!c) {
-					if (!C()) {
-						return S.error("缺少 duoshuoQuery 的定义")
-					}
-					S.warn("请在加载多说 embed.js 之前定义 duoshuoQuery")
+					if (!q()) return C.error("缺少 duoshuoQuery 的定义");
+					C.warn("请在加载多说 embed.js 之前定义 duoshuoQuery")
 				}
 				setInterval(function() {
-					$(".ds-time").each(function() {
-						var e = $(this).attr("datetime");
-						e && (this.innerHTML = j.elapsedTime(e))
+					H(".ds-time").each(function() {
+						var e = H(this).attr("datetime");
+						e && (this.innerHTML = S.elapsedTime(e))
 					})
 				},
-				20000),
+				2e4),
 				c.ondomready && c.ondomready(),
-				j.initView(),
-				!pt && c.short_name && A.get("analytics/ping", J({}), H)
+				S.initView(),
+				!it && c.short_name && R.get("analytics/ping", B({}), W)
 			})
 		})
 	}
