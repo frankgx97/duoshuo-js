@@ -992,7 +992,7 @@ function sskos(e) {
 			i = e.options,
 			r = s.author;
 			s.message = s.message.replace(/http:\/\/static\.duoshuo\.com\//g, "https://static.duoshuo.com/");
-			s.message = s.message.replace(/http:\/\/img\.t\.sinajs\.cn\//g, "https://o36vpu6ui.qnssl.com/");
+			s.message = s.message.replace(/http:\/\/img\.t\.sinajs\.cn\//g, "https://img.t.sinajs.cn/");
 			if (t += '<li class="ds-post" data-post-id="' + s.post_id + '"><div class="ds-post-self" data-post-id="' + s.post_id + '" data-thread-id="' + s.thread_id + '" data-root-id="' + s.root_id + '" data-source="' + s.source + '"><div class="ds-avatar"', r.user_id && (t += ' data-user-id="' + r.user_id + '"'), t += ">" + et.avatar(r), S.sourceName[s.source] && (t += et.serviceIcon(s.source)), t += '</div><div class="ds-comment-body"><div class="ds-comment-header">', r.url ? (t += '<a class="ds-user-name ds-highlight" data-qqt-account="' + (r.qqt_account || "") + '" href="' + u(r.url) + '" ', r.user_id && (t += " onclick=\"this.href='" + a() + "/user-url/?user_id=" + r.user_id + "';\""), t += ' rel="nofollow" target="_blank"', r.user_id && (t += ' data-user-id="' + r.user_id + '"'), t += ">" + u(r.name) + "</a>") : (t += '<span class="ds-user-name"', r.user_id && (t += ' data-user-id="' + r.user_id + '"'), t += ' data-qqt-account="' + (r.qqt_account || "") + '">' + u(r.name) + "</span>"), t += "</div>", 1 == i.max_depth && i.show_context && s.parents.length) {
 				t += '<ol id="ds-ctx">';
 				var n = lt.getJSON(s.parents);
